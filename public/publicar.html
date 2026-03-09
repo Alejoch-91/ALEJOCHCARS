@@ -7,13 +7,14 @@
     <title>Alejoch Cars | Registrar Vehículo</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        explosive: '#ff3e00', // Rojo vibrante explosivo
-                        open: '#ffffff', // Fondo abierto blanco
+                        explosive: '#ff3e00',
+                        open: '#ffffff',
                     },
                     fontFamily: { sans: ['Poppins', 'sans-serif'] }
                 }
@@ -21,13 +22,8 @@
         }
     </script>
     <style>
-        body {
-            background-color: #f7f9fc;
-        }
-
-        input,
-        textarea,
-        select {
+        body { background-color: #f7f9fc; }
+        input, textarea, select {
             border: 1px solid #e2e8f0;
             padding: 14px;
             border-radius: 14px;
@@ -37,15 +33,11 @@
             transition: 0.3s;
             background: white;
         }
-
-        input:focus,
-        textarea:focus,
-        select:focus {
+        input:focus, textarea:focus, select:focus {
             border-color: #ff3e00;
             ring: 2px;
             ring-color: rgba(255, 62, 0, 0.2);
         }
-
         label {
             display: block;
             margin-bottom: 8px;
@@ -57,19 +49,18 @@
         }
     </style>
 </head>
-<script>
-    if (!localStorage.getItem('alejoch_token')) {
-        window.location.href = '/auth.html';
-    }
-</script>
+
 <body class="p-6 md:p-12 flex flex-col items-center">
 
     <header class="mb-12 flex flex-col items-center">
         <img src="Logo ALEJOCH.png" alt="Alejoch Cars" class="h-12 mb-4">
-        <h1 class="text-3xl font-extrabold tracking-tighter text-gray-950">
+        <h1 class="text-3xl font-extrabold tracking-tighter text-gray-950 text-center">
             Registrar Vehículo <span class="text-explosive font-light">en Alejoch</span>
         </h1>
-        <a href="/" class="text-explosive text-sm mt-4 inline-block font-semibold">← Volver a la Galería</a>
+        <div class="flex gap-4 mt-4">
+            <a href="/" class="text-gray-500 text-sm font-semibold">← Galería</a>
+            <a href="/mis-publicaciones.html" class="text-explosive text-sm font-semibold">Mis Publicaciones →</a>
+        </div>
     </header>
 
     <div class="max-w-md w-full bg-open p-10 rounded-3xl border border-gray-100 shadow-2xl">
@@ -79,7 +70,7 @@
                     <label>Tipo de Vehículo</label>
                     <select name="tipo_vehiculo" required class="cursor-pointer">
                         <option value="" disabled selected>Selecciona tipo...</option>
-                        <option value="Carro">Carro (Sedan, Hatchback, etc.)</option>
+                        <option value="Carro">Carro</option>
                         <option value="Camioneta">Camioneta / SUV</option>
                         <option value="Moto">Moto</option>
                         <option value="Deportivo">Deportivo</option>
@@ -87,57 +78,72 @@
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" name="marca" placeholder="Marca (ej: Porsche)" class="" required>
-                    <input type="text" name="modelo" placeholder="Modelo (ej: 911 GT3)" class="" required>
+                    <input type="text" name="marca" placeholder="Marca" required>
+                    <input type="text" name="modelo" placeholder="Modelo" required>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="number" name="ano" placeholder="Año (ej: 2024)" class="" required>
-                    <input type="number" name="kilometraje" placeholder="Kilometraje (ej: 15000)" class="" required>
+                    <input type="number" name="ano" placeholder="Año" required>
+                    <input type="number" name="kilometraje" placeholder="Kilometraje" required>
                 </div>
 
                 <div>
-                    <label>Precio Final <span class="text-explosive">(En Pesos Colombianos COP)</span></label>
-                    <input type="number" name="precio" placeholder="Ej: 350000000" class="" required>
-                    <p class="text-xs text-gray-400 mt-1 italic">Ingresa el valor completo sin puntos ni comas.</p>
+                    <label>Precio Final <span class="text-explosive">(COP)</span></label>
+                    <input type="number" name="precio" placeholder="Ej: 35000000" required>
                 </div>
 
-                <input type="text" name="whatsapp_contacto" placeholder="WhatsApp (Ej: 573101234567)" class="" required>
+                <input type="text" name="whatsapp_contacto" placeholder="WhatsApp (Ej: 57310...)" required>
 
                 <div class="py-4">
-                    <label class="text-xs text-gray-500 uppercase">Foto Real del Vehículo <span
-                            class="text-explosive">*</span></label>
-                    <input type="file" id="foto" required
-                        class="mt-2 block w-full text-sm text-gray-500 border-none bg-gray-50 p-3 rounded-lg cursor-pointer">
+                    <label class="text-xs text-gray-500 uppercase">Foto Real <span class="text-explosive">*</span></label>
+                    <input type="file" id="foto" required class="mt-2 block w-full text-sm text-gray-500 border-none bg-gray-50 p-3 rounded-lg cursor-pointer">
                 </div>
 
                 <label class="flex items-center space-x-3 text-sm text-gray-700 font-medium">
-                    <input type="checkbox" name="es_vip" value="true" class="w-5 h-5 accent-explosive"> <span>Publicidad
-                        Destacada Alejoch (VIP)</span>
+                    <input type="checkbox" name="es_vip" value="true" class="w-5 h-5 accent-explosive"> 
+                    <span>Publicidad Destacada (VIP)</span>
                 </label>
 
-                <button type="submit" id="btn"
-                    class="w-full bg-explosive text-white p-5 rounded-2xl font-bold hover:bg-black transition-colors shadow-lg">Publicar
-                    Ahora en Alejoch Cars</button>
+                <button type="submit" id="btn" class="w-full bg-explosive text-white p-5 rounded-2xl font-bold hover:bg-black transition-colors shadow-lg">
+                    Publicar Ahora
+                </button>
             </div>
         </form>
     </div>
 
-    <footer class="mt-20 py-8 text-sm text-gray-400">
-        &copy; 2024 Alejoch Cars Colombia.
-    </footer>
-
     <script>
+        // CONFIGURACIÓN DE SUPABASE (USA TUS LLAVES)
+        const supabaseUrl = 'TU_URL_DE_SUPABASE';
+        const supabaseKey = 'TU_ANON_KEY';
+        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Seguridad: Verificar si hay sesión
+        async function verificarSesion() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                window.location.href = '/auth.html';
+            }
+        }
+        verificarSesion();
+
         document.getElementById('form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn');
             btn.innerText = "Subiendo a Alejoch Cars...";
             btn.disabled = true;
 
+            // 1. OBTENER EL USUARIO ACTUAL
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            if (!user) {
+                alert("Debes iniciar sesión primero");
+                window.location.href = '/auth.html';
+                return;
+            }
+
             const formData = new FormData();
             const formElement = e.target;
 
-            // Recolectamos los datos de texto
+            // 2. RECOLECTAR DATOS INCLUYENDO EL USER_ID
             formData.append('marca', formElement.marca.value);
             formData.append('modelo', formElement.modelo.value);
             formData.append('ano', formElement.ano.value);
@@ -146,11 +152,11 @@
             formData.append('whatsapp_contacto', formElement.whatsapp_contacto.value);
             formData.append('tipo_vehiculo', formElement.tipo_vehiculo.value);
             formData.append('es_vip', formElement.es_vip.checked ? 'true' : 'false');
+            formData.append('user_id', user.id); // <--- VÍNCULO CON EL DUEÑO
 
-            // La foto es CRUCIAL
             const fotoFile = document.getElementById('foto').files[0];
             if (!fotoFile) {
-                alert("Alejoch, ¡falta la foto del carro!");
+                alert("¡Falta la foto del carro!");
                 btn.innerText = "Publicar Ahora"; btn.disabled = false;
                 return;
             }
@@ -159,24 +165,22 @@
             try {
                 const res = await fetch('/api/autos', {
                     method: 'POST',
-                    body: formData // Enviamos como FormData para que suba el archivo
+                    body: formData
                 });
 
                 if (res.ok) {
-                    alert("¡Vehículo publicado con éxito en Alejoch Cars! 🚀");
-                    window.location.href = "/";
+                    alert("¡Recibido! Tu vehículo está en revisión por Alejoch. 🚀");
+                    window.location.href = "/mis-publicaciones.html"; // Redirigir a sus publicaciones
                 } else {
                     const errorData = await res.json();
-                    console.error("Error detallado:", errorData);
-                    alert("Error: " + (errorData.error || "Revisa la consola de Visual Studio Code"));
+                    alert("Error: " + (errorData.error || "Revisa el servidor"));
                     btn.innerText = "Publicar Ahora"; btn.disabled = false;
                 }
             } catch (err) {
-                alert("Error de conexión con el servidor");
+                alert("Error de conexión");
                 btn.innerText = "Publicar Ahora"; btn.disabled = false;
             }
         };
     </script>
 </body>
-
 </html>

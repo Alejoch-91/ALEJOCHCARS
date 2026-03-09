@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Publicaciones | Alejoch Cars</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-50 font-[Poppins]">
+
+    <nav class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50">
+        <h1 class="font-extrabold text-xl text-gray-900">Alejoch <span class="text-[#ff3e00]">Cars</span></h1>
+        <a href="/publicar.html" class="bg-gray-100 text-sm font-bold px-4 py-2 rounded-xl text-gray-700">Volver</a>
+    </nav>
+
+    <main class="max-w-4xl mx-auto p-6">
+        <header class="mb-8">
+            <h2 class="text-3xl font-extrabold text-gray-950">Mis Publicaciones</h2>
+            <p class="text-gray-500">Aquí puedes ver el estado de tus vehículos.</p>
+        </header>
+
+        <div id="lista-publicaciones" class="space-y-4">
+            <div class="animate-pulse flex space-x-4 bg-white p-6 rounded-3xl border border-gray-100">
+                <div class="rounded-xl bg-gray-200 h-24 w-24"></div>
+                <div class="flex-1 space-y-4 py-1">
+                    <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co';
+        const supabaseKey = 'sb_publishable_fVFA3TB_TT8z7m3qyZ93QQ_WJ_zq0Yd';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function cargarMisAutos() {
+            const container = document.getElementById('lista-publicaciones');
+            
+            // 1. Obtener el usuario actual
+            const { data: { user }, error: userError } = await _supabase.auth.getUser();
+
+            if (userError || !user) {
+                window.location.href = '/auth.html';
+                return;
+            }
+
+            // 2. Consultar solo los autos de este usuario
+            // Nota: Tu tabla de autos DEBE tener una columna llamada 'user_id'
+            const { data: autos, error } = await _supabase.from('autos')
+                .select('*')
+                .eq('user_id', user.id)
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                container.innerHTML = `<p class="text-red-500">Error al cargar datos.</p>`;
+                return;
+            }
+
+            if (autos.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-20 bg-white rounded-[2.5rem] border-2 border-dashed border-gray-200">
+                        <p class="text-gray-400 mb-4 font-medium">Aún no tienes publicaciones activas.</p>
+                        <a href="/publicar.html" class="text-[#ff3e00] font-bold underline">Publicar mi primer carro</a>
+                    </div>`;
+                return;
+            }
+
+            // 3. Renderizar tarjetas
+            container.innerHTML = autos.map(auto => `
+                <div class="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-5 hover:shadow-md transition-all">
+                    <img src="${auto.imagen_url}" class="w-24 h-24 object-cover rounded-2xl bg-gray-100">
+                    <div class="flex-1">
+                        <h3 class="font-extrabold text-gray-900 text-lg">${auto.marca} ${auto.modelo}</h3>
+                        <p class="text-[#ff3e00] font-bold text-sm">$${auto.precio.toLocaleString()}</p>
+                        <div class="mt-2 inline-block px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest ${auto.estado === 'aprobado' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}">
+                            ${auto.estado === 'aprobado' ? '● Publicado' : '● Pendiente'}
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        cargarMisAutos();
+    </script>
+</body>
+</html>
