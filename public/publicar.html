@@ -133,7 +133,9 @@
             btn.disabled = true;
 
             // 1. OBTENER EL USUARIO ACTUAL
-            const { data: { user } } = await supabaseClient.auth.getUser();
+            // Verifica que esta línea esté antes del formData.append
+const { data: { user } } = await supabaseClient.auth.getUser();
+formData.append('user_id', user.id);
             if (!user) {
                 alert("Debes iniciar sesión primero");
                 window.location.href = '/auth.html';
