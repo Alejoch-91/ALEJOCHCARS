@@ -10,9 +10,9 @@
 </head>
 <body class="bg-gray-50 font-[Poppins]">
 
-    <nav class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50">
+    <nav class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
         <h1 class="font-extrabold text-xl text-gray-900">Alejoch <span class="text-[#ff3e00]">Cars</span></h1>
-        <a href="/publicar.html" class="bg-gray-100 text-sm font-bold px-4 py-2 rounded-xl text-gray-700">Volver</a>
+        <a href="/publicar.html" class="bg-gray-100 text-sm font-bold px-4 py-2 rounded-xl text-gray-700 hover:bg-gray-200 transition">← Volver</a>
     </nav>
 
     <main class="max-w-4xl mx-auto p-6">
@@ -32,7 +32,8 @@
         </div>
     </main>
 
-    const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co';
+    <script>
+        const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphbnhhY2RlaGxsZHhsdGlrb295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NzIxODEsImV4cCI6MjA4ODI0ODE4MX0.HzM2SL1zOTkRKZHvvKe75udJGnmeZcMv9PEoaYlWXO0';
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
@@ -49,7 +50,7 @@
 
             const user = session.user;
 
-            // 2. Consultar la tabla 'vehiculos' (usando el nombre de tu backend)
+            // 2. Consultar la tabla 'vehiculos'
             const { data: vehiculos, error } = await _supabase
                 .from('vehiculos') 
                 .select('*')
@@ -58,7 +59,7 @@
 
             if (error) {
                 console.error(error);
-                container.innerHTML = `<p class="text-red-500 text-center py-10">Error al conectar con la base de datos.</p>`;
+                container.innerHTML = `<p class="text-red-500 text-center py-10 font-bold">Error al conectar con la base de datos: ${error.message}</p>`;
                 return;
             }
 
@@ -66,7 +67,7 @@
                 container.innerHTML = `
                     <div class="text-center py-20 bg-white rounded-[2.5rem] border-2 border-dashed border-gray-200">
                         <p class="text-gray-400 mb-4 font-medium">Aún no tienes publicaciones activas.</p>
-                        <a href="/publicar.html" class="text-[#ff3e00] font-bold underline">Publicar mi primer carro</a>
+                        <a href="/publicar.html" class="text-[#ff3e00] font-bold hover:underline">Publicar mi primer carro</a>
                     </div>`;
                 return;
             }
@@ -77,14 +78,14 @@
                     <img src="${auto.imagen_url || 'https://via.placeholder.com/150'}" class="w-24 h-24 object-cover rounded-2xl bg-gray-100">
                     <div class="flex-1">
                         <h3 class="font-extrabold text-gray-900 text-lg leading-tight">${auto.marca} ${auto.modelo}</h3>
-                        <p class="text-[#ff3e00] font-bold text-sm">$${Number(auto.precio).toLocaleString('es-CO')}</p>
+                        <p class="text-[#ff3e00] font-bold text-sm">$${Number(auto.precio).toLocaleString('es-CO')} COP</p>
                         <div class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest ${auto.estado === 'aprobado' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}">
                             <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
                             ${auto.estado === 'aprobado' ? 'Publicado' : 'Pendiente'}
                         </div>
                     </div>
                     <div class="flex flex-col gap-2">
-                         <button onclick="eliminarVehiculo('${auto.id}')" class="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-colors group" title="Eliminar">
+                         <button onclick="eliminarVehiculo('${auto.id}')" class="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-colors group cursor-pointer" title="Eliminar publicación">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
@@ -106,7 +107,6 @@
             if (error) {
                 alert("Error al eliminar: " + error.message);
             } else {
-                // Remover la tarjeta del DOM con un efecto suave
                 const card = document.getElementById(`card-${id}`);
                 card.style.opacity = '0';
                 card.style.transform = 'scale(0.9)';
@@ -114,6 +114,8 @@
             }
         }
 
+        // Iniciar la carga
         cargarMisAutos();
+    </script>
 </body>
 </html>
