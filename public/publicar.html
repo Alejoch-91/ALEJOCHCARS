@@ -111,8 +111,8 @@
         </form>
     </div>
 
-    <script>
-        // CONFIGURACIÓN DE SUPABASE (USA TUS LLAVES)
+   <script>
+        // CONFIGURACIÓN DE SUPABASE
         const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co';
         const supabaseKey = 'sb_publishable_fVFA3TB_TT8z7m3qyZ93QQ_WJ_zq0Yd';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
@@ -132,39 +132,40 @@
             btn.innerText = "Subiendo a Alejoch Cars...";
             btn.disabled = true;
 
-            // 1. OBTENER EL USUARIO ACTUAL
-            // Verifica que esta línea esté antes del formData.append
-const { data: { user } } = await supabaseClient.auth.getUser();
-formData.append('user_id', user.id);
-            if (!user) {
-                alert("Debes iniciar sesión primero");
-                window.location.href = '/auth.html';
-                return;
-            }
-
-            const formData = new FormData();
-            const formElement = e.target;
-
-            // 2. RECOLECTAR DATOS INCLUYENDO EL USER_ID
-            formData.append('marca', formElement.marca.value);
-            formData.append('modelo', formElement.modelo.value);
-            formData.append('ano', formElement.ano.value);
-            formData.append('precio', formElement.precio.value);
-            formData.append('kilometraje', formElement.kilometraje.value);
-            formData.append('whatsapp_contacto', formElement.whatsapp_contacto.value);
-            formData.append('tipo_vehiculo', formElement.tipo_vehiculo.value);
-            formData.append('es_vip', formElement.es_vip.checked ? 'true' : 'false');
-            formData.append('user_id', user.id); // <--- VÍNCULO CON EL DUEÑO
-
-            const fotoFile = document.getElementById('foto').files[0];
-            if (!fotoFile) {
-                alert("¡Falta la foto del carro!");
-                btn.innerText = "Publicar Ahora"; btn.disabled = false;
-                return;
-            }
-            formData.append('foto', fotoFile);
-
             try {
+                // 1. OBTENER EL USUARIO ACTUAL
+                const { data: { user } } = await supabaseClient.auth.getUser();
+                
+                if (!user) {
+                    alert("Debes iniciar sesión primero");
+                    window.location.href = '/auth.html';
+                    return;
+                }
+
+                // 2. INICIALIZAR EL OBJETO (Esto debe ir antes de cualquier append)
+                const formData = new FormData();
+                const formElement = e.target;
+
+                // 3. RECOLECTAR DATOS
+                formData.append('marca', formElement.marca.value);
+                formData.append('modelo', formElement.modelo.value);
+                formData.append('ano', formElement.ano.value);
+                formData.append('precio', formElement.precio.value);
+                formData.append('kilometraje', formElement.kilometraje.value);
+                formData.append('whatsapp_contacto', formElement.whatsapp_contacto.value);
+                formData.append('tipo_vehiculo', formElement.tipo_vehiculo.value);
+                formData.append('es_vip', formElement.es_vip.checked ? 'true' : 'false');
+                formData.append('user_id', user.id); // <--- VÍNCULO SEGURO CON EL DUEÑO
+
+                const fotoFile = document.getElementById('foto').files[0];
+                if (!fotoFile) {
+                    alert("¡Falta la foto del carro!");
+                    btn.innerText = "Publicar Ahora"; btn.disabled = false;
+                    return;
+                }
+                formData.append('foto', fotoFile);
+
+                // 4. ENVÍO AL SERVIDOR
                 const res = await fetch('/api/autos', {
                     method: 'POST',
                     body: formData
@@ -172,13 +173,14 @@ formData.append('user_id', user.id);
 
                 if (res.ok) {
                     alert("¡Recibido! Tu vehículo está en revisión por Alejoch. 🚀");
-                    window.location.href = "/mis-publicaciones.html"; // Redirigir a sus publicaciones
+                    window.location.href = "/mis-publicaciones.html";
                 } else {
                     const errorData = await res.json();
                     alert("Error: " + (errorData.error || "Revisa el servidor"));
                     btn.innerText = "Publicar Ahora"; btn.disabled = false;
                 }
             } catch (err) {
+                console.error(err);
                 alert("Error de conexión");
                 btn.innerText = "Publicar Ahora"; btn.disabled = false;
             }
