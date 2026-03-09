@@ -18,54 +18,64 @@
         }
     </script>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-6">
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-6 font-sans">
 
-    <div class="max-w-md w-full bg-white p-10 rounded-3xl border border-gray-100 shadow-2xl text-center">
+    <div id="card-contenedor" class="max-w-md w-full bg-white p-10 rounded-[2.5rem] border-2 border-transparent shadow-2xl text-center transition-all duration-500">
         <img src="Logo ALEJOCH.png" alt="Alejoch Cars" class="h-12 mx-auto mb-6" onerror="this.src='https://via.placeholder.com/150x50/ff3e00/ffffff?text=ALEJOCH'">
         
-        <h2 id="titulo-form" class="text-2xl font-extrabold text-gray-950 mb-2">Iniciar Sesión</h2>
-        <p id="subtitulo-form" class="text-sm text-gray-500 mb-8">Accede para gestionar tus publicaciones.</p>
+        <h2 id="titulo-form" class="text-3xl font-extrabold text-gray-950 mb-2">Iniciar Sesión</h2>
+        <p id="subtitulo-form" class="text-sm text-gray-500 mb-8 leading-relaxed">Accede para gestionar tus publicaciones.</p>
 
         <form id="authForm" class="space-y-5 text-left">
             <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-widest">Correo Electrónico</label>
-                <input type="email" id="email" placeholder="ejemplo@correo.com" required 
-                    class="w-full border border-gray-200 p-4 rounded-2xl focus:border-explosive focus:ring-1 focus:ring-explosive outline-none transition-all">
+                <label class="block text-[10px] font-extrabold text-gray-400 uppercase mb-2 tracking-[0.2em]">Correo Electrónico</label>
+                <input type="email" id="email" placeholder="tu@correo.com" required 
+                    class="w-full border border-gray-100 bg-gray-50 p-4 rounded-2xl focus:border-explosive focus:bg-white focus:ring-0 outline-none transition-all">
             </div>
             <div>
-                <label class="block text-xs font-bold text-gray-700 uppercase mb-2 tracking-widest">Contraseña</label>
+                <label class="block text-[10px] font-extrabold text-gray-400 uppercase mb-2 tracking-[0.2em]">Contraseña</label>
                 <input type="password" id="password" placeholder="••••••••" required 
-                    class="w-full border border-gray-200 p-4 rounded-2xl focus:border-explosive focus:ring-1 focus:ring-explosive outline-none transition-all">
+                    class="w-full border border-gray-100 bg-gray-50 p-4 rounded-2xl focus:border-explosive focus:bg-white focus:ring-0 outline-none transition-all">
             </div>
             <button type="submit" id="btn-submit" 
-                class="w-full bg-explosive text-white p-5 rounded-2xl font-extrabold hover:bg-black transition-all transform active:scale-95 shadow-lg shadow-orange-100">
+                class="w-full bg-explosive text-white p-5 rounded-2xl font-extrabold hover:bg-black transition-all transform active:scale-95 shadow-xl shadow-orange-100">
                 Entrar
             </button>
         </form>
 
-        <div class="mt-8 pt-6 border-t border-gray-100">
-            <p class="text-sm text-gray-500">
+        <div class="mt-10 pt-6 border-t border-gray-50">
+            <p class="text-sm text-gray-400 font-medium">
                 <span id="texto-alterno">¿Aún no tienes cuenta?</span> 
-                <button onclick="toggleModo()" id="btn-alterno" class="text-explosive font-extrabold hover:underline ml-1">Regístrate gratis</button>
+                <button type="button" onclick="toggleModo()" id="btn-alterno" class="text-explosive font-extrabold hover:underline ml-1">Regístrate gratis</button>
             </p>
         </div>
     </div>
 
     <script>
-        // CONFIGURACIÓN DE SUPABASE (Asegúrate de que estas coincidan con tu .env en Render)
-        const supabaseUrl = 'TU_URL_DE_SUPABASE_AQUI'; 
-        const supabaseKey = 'TU_ANON_KEY_DE_SUPABASE_AQUI';
+        // CONFIGURACIÓN DE SUPABASE
+        const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co'; 
+        const supabaseKey = 'sb_publishable_fVFA3TB_TT8z7m3qyZ93QQ_WJ_zq0Yd';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
 
         let esRegistro = false;
 
         function toggleModo() {
             esRegistro = !esRegistro;
+            const card = document.getElementById('card-contenedor');
+            
+            // Cambios de texto
             document.getElementById('titulo-form').innerText = esRegistro ? "Crear Cuenta" : "Iniciar Sesión";
             document.getElementById('subtitulo-form').innerText = esRegistro ? "Únete a la red de vendedores de Alejoch." : "Accede para gestionar tus publicaciones.";
             document.getElementById('btn-submit').innerText = esRegistro ? "Registrarme Ahora" : "Entrar";
             document.getElementById('texto-alterno').innerText = esRegistro ? "¿Ya eres parte?" : "¿Aún no tienes cuenta?";
             document.getElementById('btn-alterno').innerText = esRegistro ? "Inicia sesión" : "Regístrate gratis";
+
+            // Efecto visual: Resaltar el borde cuando es registro
+            if(esRegistro) {
+                card.classList.add('border-explosive/10');
+            } else {
+                card.classList.remove('border-explosive/10');
+            }
         }
 
         document.getElementById('authForm').onsubmit = async (e) => {
@@ -74,31 +84,27 @@
             const password = document.getElementById('password').value;
             const btn = document.getElementById('btn-submit');
             
-            btn.innerText = "Procesando...";
+            btn.innerText = "Verificando...";
             btn.disabled = true;
 
             try {
-                let res;
                 if (esRegistro) {
-                    // REGISTRO DE NUEVO USUARIO
-                    res = await supabaseClient.auth.signUp({ email, password });
-                    if (!res.error) {
-                        alert("¡Cuenta creada! Ya puedes iniciar sesión.");
-                        toggleModo();
-                    }
+                    // FLUJO DE REGISTRO
+                    const { data, error } = await supabaseClient.auth.signUp({ email, password });
+                    if (error) throw error;
+                    alert("¡Cuenta creada con éxito! Ahora puedes iniciar sesión.");
+                    toggleModo(); 
                 } else {
-                    // INICIO DE SESIÓN
-                    res = await supabaseClient.auth.signInWithPassword({ email, password });
-                    if (!res.error) {
-                        // Guardar el token para proteger otras páginas
-                        localStorage.setItem('alejoch_token', res.data.session.access_token);
-                        window.location.href = '/publicar.html'; // Redirigir al formulario
-                    }
+                    // FLUJO DE LOGIN
+                    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                    if (error) throw error;
+                    
+                    // Guardar token y redirigir
+                    localStorage.setItem('alejoch_token', data.session.access_token);
+                    window.location.href = '/publicar.html';
                 }
-
-                if (res.error) throw res.error;
             } catch (err) {
-                alert("Error: " + err.message);
+                alert("Atención: " + err.message);
             } finally {
                 btn.innerText = esRegistro ? "Registrarme Ahora" : "Entrar";
                 btn.disabled = false;
