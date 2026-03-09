@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alejoch Cars | Curaduría Premium de Automóviles</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        explosive: '#ff3e00', // Rojo vibrante explosivo
+                        open: '#ffffff', // Fondo abierto blanco
+                        accent: '#00e6ff' // Cian eléctrico neón
+                    },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .filter-btn.active { background-color: #ff3e00; color: white; border-color: #ff3e00; }
+        .card-vip { border: 2px solid #ff3e00; box-shadow: 0 10px 30px rgba(255, 62, 0, 0.2); }
+        body { background-color: #f7f9fc; }
+    </style>
+</head>
+<body class="text-gray-900">
+    
+    <header class="bg-open border-b border-gray-100 shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="Logo ALEJOCH.png" alt="Alejoch Cars" class="h-12">
+                <h1 class="text-3xl font-extrabold tracking-tighter text-gray-950">
+                    ALEJOCH <span class="text-explosive font-light">Cars</span> Colombia
+                </h1>
+            </div>
+            <a href="/publicar.html" class="bg-explosive text-white px-8 py-3 rounded-full font-bold text-sm hover:scale-105 transition-transform shadow-lg">
+                Vender mi Vehículo
+            </a>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <div class="mb-12 text-center">
+            <h2 class="text-6xl font-extrabold text-gray-950 tracking-tight leading-none">
+                Tu próximo auto,<br>seleccionado por <span class="text-explosive italic">expertos</span>.
+            </h2>
+            <p class="text-xl text-gray-600 mt-6 max-w-2xl mx-auto">
+                Explora la curaduría premium de automóviles de Alejoch. Filtrado instantáneo para la mejor experiencia.
+            </p>
+        </div>
+
+        <div class="bg-open p-8 rounded-3xl border border-gray-100 shadow-xl mb-12">
+            <input type="text" id="buscador" onkeyup="filtrarTodo()" placeholder="🔍 Busca por marca, modelo o año..." 
+                   class="w-full bg-gray-50 border border-gray-200 p-5 rounded-2xl focus:border-explosive focus:ring-1 focus:ring-explosive outline-none text-lg">
+            
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div>
+                    <label class="text-sm font-bold text-gray-700 uppercase">Categoría</label>
+                    <div id="filter-type" class="flex gap-2 mt-2 flex-wrap">
+                        <button onclick="toggleTypeFilter(this)" value="" class="filter-btn active px-4 py-2 border rounded-full text-sm">Todos</button>
+                        <button onclick="toggleTypeFilter(this)" value="Carro" class="filter-btn px-4 py-2 border rounded-full text-sm">Carros</button>
+                        <button onclick="toggleTypeFilter(this)" value="Camioneta" class="filter-btn px-4 py-2 border rounded-full text-sm">Camionetas</button>
+                    </div>
+                </div>
+                <div>
+                    <label class="text-sm font-bold text-gray-700 uppercase">Precio Máximo (COP)</label>
+                    <input type="range" id="filter-price" min="10" max="300" step="5" value="300" oninput="updatePriceLabel(this.value); filtrarTodo();"
+                           class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-explosive mt-4">
+                    <span id="price-label" class="text-sm text-gray-600 mt-1 block">$300 Millones +</span>
+                </div>
+                <div>
+                    <label class="text-sm font-bold text-gray-700 uppercase">Año Mínimo</label>
+                    <select id="filter-year" onchange="filtrarTodo()" class="w-full bg-gray-50 border border-gray-200 p-3 mt-2 rounded-xl text-sm focus:ring-1 focus:ring-explosive">
+                        <option value="">Cualquier Año</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2020">2020+</option>
+                        <option value="2015">2015+</option>
+                        <option value="2010">2010+</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-sm font-bold text-gray-700 uppercase">Kilometraje Máximo</label>
+                    <select id="filter-km" onchange="filtrarTodo()" class="w-full bg-gray-50 border border-gray-200 p-3 mt-2 rounded-xl text-sm focus:ring-1 focus:ring-explosive">
+                        <option value="">Cualquier Kilometraje</option>
+                        <option value="10000">≤ 10,000 km</option>
+                        <option value="50000">≤ 50,000 km</option>
+                        <option value="100000">≤ 100,000 km</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="lista-autos" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+            <p class="text-gray-500 col-span-full text-center py-20 italic">Encendiendo motores...</p>
+        </div>
+    </main>
+
+    <footer class="bg-gray-950 text-white mt-20 py-12 px-6">
+        <div class="max-w-7xl mx-auto text-center text-sm text-gray-400">
+            &copy; 2024 Alejoch Cars Colombia. Todos los derechos reservados. Expertos en automoción.
+        </div>
+    </footer>
+
+    <script>
+        let allCars = [];
+        let activeTypeFilter = "";
+
+        // Función para cargar los autos de la API
+        async function cargar() {
+            try {
+                const res = await fetch('/api/autos');
+                allCars = await res.json();
+                renderAutos(allCars);
+            } catch (error) {
+                console.error("Error al cargar autos:", error);
+                document.getElementById('lista-autos').innerHTML = `<p class="text-red-500 col-span-full text-center py-20">Error de conexión con Alejoch.</p>`;
+            }
+        }
+
+        // Renderizar la lista de autos en la galería (con COP)
+        // Dentro de tu index.html
+function renderAutos(autos) {
+    const lista = document.getElementById('lista-autos');
+    
+    if (autos.length === 0) {
+        lista.innerHTML = `<p class="text-gray-500 col-span-full text-center py-20 italic">No encontramos vehículos con esos criterios.</p>`;
+        return;
+    }
+
+    lista.innerHTML = autos.map(a => `
+        <a href="/detalle.html?id=${a.id}" class="bg-open rounded-3xl overflow-hidden transition-all hover:scale-[1.03] shadow-lg group block ${a.es_vip ? 'card-vip' : 'border border-gray-100'} cursor-pointer">
+            <div class="relative h-64 overflow-hidden">
+                <img src="${a.imagen_url || 'https://via.placeholder.com/800x600?text=Alejoch+Cars'}" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700">
+                ${a.es_vip ? '<span class="absolute top-4 right-4 bg-explosive text-white text-[11px] font-extrabold px-3 py-1.5 rounded-full shadow-md tracking-wider">DESTACADO ALEJOCH</span>' : ''}
+                <span class="absolute bottom-4 left-4 bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded backdrop-blur-sm">${a.tipo_vehiculo.toUpperCase()}</span>
+            </div>
+            <div class="p-8">
+                <span class="text-xs text-explosive font-extrabold uppercase tracking-widest">${a.marca}</span>
+                <h3 class="text-2xl font-extrabold text-gray-950 mt-1 tracking-tighter">${a.modelo}</h3>
+                <p class="text-gray-500 text-sm mb-6">${a.ano} • ${a.kilometraje.toLocaleString('es-CO')} km</p>
+                <div class="flex justify-between items-center border-t border-gray-100 pt-6">
+                    <span class="text-3xl font-light text-gray-950 tracking-tight">$${Number(a.precio).toLocaleString('es-CO')} <span class="text-sm font-bold text-gray-500">COP</span></span>
+                </div>
+            </div>
+        </a>
+    `).join('');
+}
+        // SISTEMA DE FILTROS INTEGRADO (TODAS LAS VARIABLES)
+        function filtrarTodo() {
+            // 1. Obtener valores de los filtros
+            const textSearch = document.getElementById('buscador').value.toLowerCase();
+            const maxPriceInMillions = parseInt(document.getElementById('filter-price').value);
+            const minYear = parseInt(document.getElementById('filter-year').value);
+            const maxKm = parseInt(document.getElementById('filter-km').value);
+
+            // 2. Aplicar lógica de filtrado sobre el array en memoria
+            const carsFiltered = allCars.filter(car => {
+                // A. Filtro Texto
+                const searchStr = `${car.marca} ${car.modelo} ${car.ano} Colombia`.toLowerCase();
+                if (textSearch && !searchStr.includes(textSearch)) return false;
+
+                // B. Filtro Tipo (Botones)
+                if (activeTypeFilter && car.tipo_vehiculo !== activeTypeFilter) return false;
+
+                // C. Filtro Precio (Convirtiendo Millones a Pesos completos)
+                // Si el slider está al máximo (300M+), no aplicamos límite superior de precio
+                if (maxPriceInMillions < 300) {
+                    const priceInPesos = maxPriceInMillions * 1000000;
+                    if (car.precio > priceInPesos) return false;
+                }
+
+                // D. Filtro Año
+                if (minYear && car.ano < minYear) return false;
+
+                // E. Filtro Kilometraje
+                if (maxKm && car.kilometraje > maxKm) return false;
+
+                return true; // Pasa todos los filtros
+            });
+
+            // 3. Renderizar los resultados filtrados
+            renderAutos(carsFiltered);
+        }
+
+        // Manejo de botones de filtro tipo
+        function toggleTypeFilter(btn) {
+            document.querySelectorAll('#filter-type .filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            activeTypeFilter = btn.value;
+            filtrarTodo(); // Aplicar el filtro completo
+        }
+
+        // Actualizar la etiqueta de precio del slider
+        function updatePriceLabel(value) {
+            const label = document.getElementById('price-label');
+            if (parseInt(value) === 300) {
+                label.innerText = '$300 Millones +';
+            } else {
+                label.innerText = `$${value} Millones`;
+            }
+        }
+
+        cargar(); // Carga inicial
+    </script>
+</body>
+</html>
