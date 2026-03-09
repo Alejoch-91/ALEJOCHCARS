@@ -1,190 +1,166 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alejoch Cars | Registrar Vehículo</title>
+    <title>Publicar Vehículo | Alejoch Cars</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        explosive: '#ff3e00',
-                        open: '#ffffff',
-                    },
-                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <style>
-        body { background-color: #f7f9fc; }
-        input, textarea, select {
-            border: 1px solid #e2e8f0;
-            padding: 14px;
-            border-radius: 14px;
-            width: 100%;
-            color: #1a202c;
-            outline: none;
-            transition: 0.3s;
-            background: white;
-        }
-        input:focus, textarea:focus, select:focus {
-            border-color: #ff3e00;
-            ring: 2px;
-            ring-color: rgba(255, 62, 0, 0.2);
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-size: 0.75rem;
-            color: #4a5568;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            font-weight: 700;
-        }
-    </style>
 </head>
+<body class="bg-gray-50 font-[Poppins]">
 
-<body class="p-6 md:p-12 flex flex-col items-center">
+    <nav class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
+        <h1 class="font-extrabold text-xl text-gray-900">Alejoch <span class="text-[#ff3e00]">Cars</span></h1>
+        <a href="/" class="bg-gray-100 text-sm font-bold px-4 py-2 rounded-xl text-gray-700 hover:bg-gray-200 transition">Cancelar</a>
+    </nav>
 
-    <header class="mb-12 flex flex-col items-center">
-        <img src="Logo ALEJOCH.png" alt="Alejoch Cars" class="h-12 mb-4">
-        <h1 class="text-3xl font-extrabold tracking-tighter text-gray-950 text-center">
-            Registrar Vehículo <span class="text-explosive font-light">en Alejoch</span>
-        </h1>
-        <div class="flex gap-4 mt-4">
-            <a href="/" class="text-gray-500 text-sm font-semibold">← Galería</a>
-            <a href="/mis-publicaciones.html" class="text-explosive text-sm font-semibold">Mis Publicaciones →</a>
-        </div>
-    </header>
+    <main class="max-w-2xl mx-auto p-6">
+        <header class="mb-8">
+            <h2 class="text-3xl font-extrabold text-gray-950">Vende tu vehículo</h2>
+            <p class="text-gray-500">Completa la ficha técnica para atraer más compradores.</p>
+        </header>
 
-    <div class="max-w-md w-full bg-open p-10 rounded-3xl border border-gray-100 shadow-2xl">
-        <form id="form">
-            <div class="space-y-6">
+        <form id="form-publicar" class="space-y-6 bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+            
+            <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label>Tipo de Vehículo</label>
-                    <select name="tipo_vehiculo" required class="cursor-pointer">
-                        <option value="" disabled selected>Selecciona tipo...</option>
-                        <option value="Carro">Carro</option>
-                        <option value="Camioneta">Camioneta / SUV</option>
-                        <option value="Moto">Moto</option>
-                        <option value="Deportivo">Deportivo</option>
-                    </select>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Marca</label>
+                    <input type="text" id="marca" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Ej: Mazda">
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="text" name="marca" placeholder="Marca" required>
-                    <input type="text" name="modelo" placeholder="Modelo" required>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <input type="number" name="ano" placeholder="Año" required>
-                    <input type="number" name="kilometraje" placeholder="Kilometraje" required>
-                </div>
-
                 <div>
-                    <label>Precio Final <span class="text-explosive">(COP)</span></label>
-                    <input type="number" name="precio" placeholder="Ej: 35000000" required>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Modelo</label>
+                    <input type="text" id="modelo" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Ej: CX-5">
                 </div>
+            </div>
 
-                <input type="text" name="whatsapp_contacto" placeholder="WhatsApp (Ej: 57310...)" required>
-
-                <div class="py-4">
-                    <label class="text-xs text-gray-500 uppercase">Foto Real <span class="text-explosive">*</span></label>
-                    <input type="file" id="foto" required class="mt-2 block w-full text-sm text-gray-500 border-none bg-gray-50 p-3 rounded-lg cursor-pointer">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Precio (COP)</label>
+                    <input type="number" id="precio" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Ej: 85000000">
                 </div>
+                <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">URL de la Imagen</label>
+                    <input type="url" id="imagen_url" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="https://link-de-tu-foto.jpg">
+                </div>
+            </div>
 
-                <label class="flex items-center space-x-3 text-sm text-gray-700 font-medium">
-                    <input type="checkbox" name="es_vip" value="true" class="w-5 h-5 accent-explosive"> 
-                    <span>Publicidad Destacada (VIP)</span>
-                </label>
+            <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">Descripción del Vehículo</label>
+                <textarea id="descripcion" rows="4" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Cuéntanos sobre el estado, kilometraje, mantenimientos..."></textarea>
+            </div>
 
-                <button type="submit" id="btn" class="w-full bg-explosive text-white p-5 rounded-2xl font-bold hover:bg-black transition-colors shadow-lg">
-                    Publicar Ahora
+            <div class="p-6 bg-gray-50 rounded-[2rem] border border-gray-100">
+                <label class="block text-sm font-bold text-gray-700 mb-3">Ficha Técnica (Opcional)</label>
+                <div id="contenedor-caracteristicas" class="space-y-3 mb-4">
+                    <div class="flex gap-2 fila-caracteristica">
+                        <input type="text" placeholder="Ej: Motor" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm key-input">
+                        <input type="text" placeholder="Ej: 2.0 Turbo" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm value-input">
+                    </div>
+                </div>
+                <button type="button" onclick="agregarFila()" class="text-sm font-bold text-[#ff3e00] hover:text-orange-700 transition flex items-center gap-1">
+                    <span>+</span> Añadir característica
                 </button>
             </div>
-        </form>
-    </div>
 
-   <script>
-        // CONFIGURACIÓN DE SUPABASE
+            <div class="border-t pt-6 space-y-4">
+                <h3 class="font-bold text-gray-900">Datos de Contacto</h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tu Nombre</label>
+                        <input type="text" id="nombre_vendedor" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Nombre">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">WhatsApp</label>
+                        <input type="number" id="whatsapp" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Ej: 57300...">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="btn-publicar" class="w-full bg-[#ff3e00] text-white font-extrabold py-5 rounded-[2rem] text-lg hover:shadow-xl hover:bg-orange-600 transition-all transform active:scale-95">
+                Publicar mi vehículo
+            </button>
+        </form>
+    </main>
+
+    <script>
+        // Configuración de Supabase
         const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co';
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphbnhhY2RlaGxsZHhsdGlrb295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NzIxODEsImV4cCI6MjA4ODI0ODE4MX0.HzM2SL1zOTkRKZHvvKe75udJGnmeZcMv9PEoaYlWXO0';
-        const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Seguridad: Verificar si hay sesión
-        async function verificarSesion() {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            if (!session) {
-                window.location.href = '/auth.html';
-            }
+        // Función para agregar filas dinámicas
+        function agregarFila() {
+            const container = document.getElementById('contenedor-caracteristicas');
+            const div = document.createElement('div');
+            div.className = 'flex gap-2 fila-caracteristica animate-fade-in';
+            div.innerHTML = `
+                <input type="text" placeholder="Característica" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm key-input">
+                <input type="text" placeholder="Valor" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm value-input">
+                <button type="button" onclick="this.parentElement.remove()" class="px-3 text-gray-400 hover:text-red-500">✕</button>
+            `;
+            container.appendChild(div);
         }
-        verificarSesion();
 
-        document.getElementById('form').onsubmit = async (e) => {
+        // Lógica de Envío
+        document.getElementById('form-publicar').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const btn = document.getElementById('btn');
-            btn.innerText = "Subiendo a Alejoch Cars...";
+            const btn = document.getElementById('btn-publicar');
             btn.disabled = true;
+            btn.innerText = "Publicando...";
 
-            try {
-                // 1. OBTENER EL USUARIO ACTUAL
-                const { data: { user } } = await supabaseClient.auth.getUser();
-                
-                if (!user) {
-                    alert("Debes iniciar sesión primero");
-                    window.location.href = '/auth.html';
-                    return;
-                }
-
-                // 2. INICIALIZAR EL OBJETO (Esto debe ir antes de cualquier append)
-                const formData = new FormData();
-                const formElement = e.target;
-
-                // 3. RECOLECTAR DATOS
-                formData.append('marca', formElement.marca.value);
-                formData.append('modelo', formElement.modelo.value);
-                formData.append('ano', formElement.ano.value);
-                formData.append('precio', formElement.precio.value);
-                formData.append('kilometraje', formElement.kilometraje.value);
-                formData.append('whatsapp_contacto', formElement.whatsapp_contacto.value);
-                formData.append('tipo_vehiculo', formElement.tipo_vehiculo.value);
-                formData.append('es_vip', formElement.es_vip.checked ? 'true' : 'false');
-                formData.append('user_id', user.id); // <--- VÍNCULO SEGURO CON EL DUEÑO
-
-                const fotoFile = document.getElementById('foto').files[0];
-                if (!fotoFile) {
-                    alert("¡Falta la foto del carro!");
-                    btn.innerText = "Publicar Ahora"; btn.disabled = false;
-                    return;
-                }
-                formData.append('foto', fotoFile);
-
-                // 4. ENVÍO AL SERVIDOR
-                const res = await fetch('/api/autos', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (res.ok) {
-                    alert("¡Recibido! Tu vehículo está en revisión por Alejoch. 🚀");
-                    window.location.href = "/mis-publicaciones.html";
-                } else {
-                    const errorData = await res.json();
-                    alert("Error: " + (errorData.error || "Revisa el servidor"));
-                    btn.innerText = "Publicar Ahora"; btn.disabled = false;
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Error de conexión");
-                btn.innerText = "Publicar Ahora"; btn.disabled = false;
+            // 1. Obtener usuario actual
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (!session) {
+                alert("Debes iniciar sesión para publicar.");
+                window.location.href = '/auth.html';
+                return;
             }
-        };
+
+            // 2. Construir objeto de características JSON
+            const caracteristicasObj = {};
+            document.querySelectorAll('.fila-caracteristica').forEach(fila => {
+                const key = fila.querySelector('.key-input').value.trim();
+                const value = fila.querySelector('.value-input').value.trim();
+                if (key && value) caracteristicasObj[key] = value;
+            });
+
+            // 3. Preparar datos
+            const nuevoVehiculo = {
+                marca: document.getElementById('marca').value,
+                modelo: document.getElementById('modelo').value,
+                precio: parseFloat(document.getElementById('precio').value),
+                imagen_url: document.getElementById('imagen_url').value,
+                descripcion: document.getElementById('descripcion').value,
+                nombre_vendedor: document.getElementById('nombre_vendedor').value,
+                whatsapp: document.getElementById('whatsapp').value,
+                caracteristicas: caracteristicasObj,
+                user_id: session.user.id,
+                estado: 'pendiente' // Por defecto nacen pendientes de aprobación
+            };
+
+            // 4. Insertar en Supabase
+            const { error } = await _supabase
+                .from('vehiculos')
+                .insert([nuevoVehiculo]);
+
+            if (error) {
+                alert("Error al publicar: " + error.message);
+                btn.disabled = false;
+                btn.innerText = "Publicar mi vehículo";
+            } else {
+                alert("¡Vehículo publicado con éxito! Estará visible cuando sea aprobado.");
+                window.location.href = '/mis-publicaciones.html';
+            }
+        });
     </script>
+
+    <style>
+        @keyframes fade-in {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fade-in 0.3s ease-out; }
+    </style>
 </body>
 </html>
