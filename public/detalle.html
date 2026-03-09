@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalle del Vehículo | Alejoch Cars</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { explosive: '#ff3e00', open: '#ffffff' },
+                    fontFamily: { sans: ['Poppins', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>body { background-color: #f7f9fc; }</style>
+</head>
+<body class="text-gray-900">
+
+    <header class="bg-open border-b border-gray-100 shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="/" class="flex items-center gap-3">
+                <img src="Logo ALEJOCH.png" alt="Alejoch Cars" class="h-10" onerror="this.src='https://via.placeholder.com/150x50/ff3e00/ffffff?text=ALEJOCH'">
+            </a>
+            <a href="/" class="text-gray-500 hover:text-explosive font-semibold text-sm transition-colors">← Volver al catálogo</a>
+        </nav>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-12" id="contenedor-detalle">
+        <div class="text-center py-20 text-gray-500 animate-pulse">Cargando detalles del vehículo...</div>
+    </main>
+
+    <script>
+        async function cargarDetalle() {
+            // Obtener el ID de la URL (ej: detalle.html?id=5)
+            const urlParams = new URLSearchParams(window.location.search);
+            const id = urlParams.get('id');
+
+            if (!id) {
+                document.getElementById('contenedor-detalle').innerHTML = '<h2 class="text-2xl text-center text-red-500">Vehículo no especificado.</h2>';
+                return;
+            }
+
+            try {
+                const res = await fetch(`/api/autos/${id}`);
+                if (!res.ok) throw new Error('No se encontró el auto');
+                const auto = await res.json();
+
+                document.getElementById('contenedor-detalle').innerHTML = `
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                        <div class="lg:col-span-2 bg-white rounded-3xl overflow-hidden shadow-lg border border-gray-100 relative">
+                            ${auto.es_vip ? '<span class="absolute top-6 left-6 bg-explosive text-white text-xs font-extrabold px-4 py-2 rounded-full shadow-lg tracking-wider z-10">DESTACADO VIP</span>' : ''}
+                            <img src="${auto.imagen_url || 'https://via.placeholder.com/800x600?text=Alejoch+Cars'}" class="w-full h-full object-cover max-h-[600px]" alt="${auto.marca} ${auto.modelo}">
+                        </div>
+
+                        <div class="lg:col-span-1">
+                            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 sticky top-28">
+                                <p class="text-gray-500 text-sm uppercase tracking-widest font-bold mb-2">${auto.tipo_vehiculo} | ${auto.ano}</p>
+                                <h1 class="text-4xl font-extrabold text-gray-950 leading-tight mb-2">${auto.marca} ${auto.modelo}</h1>
+                                <p class="text-gray-500 mb-8 flex items-center gap-2">
+                                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                    ${auto.kilometraje.toLocaleString('es-CO')} km
+                                </p>
+                                
+                                <div class="bg-gray-50 rounded-2xl p-6 mb-8 border border-gray-100">
+                                    <span class="block text-sm text-gray-500 mb-1">Precio de venta</span>
+                                    <span class="text-4xl font-light text-explosive tracking-tight">$${Number(auto.precio).toLocaleString('es-CO')} <span class="text-base font-bold text-gray-900">COP</span></span>
+                                </div>
+
+                                <a href="https://wa.me/${auto.whatsapp_contacto}?text=Hola%20Alejoch,%20estoy%20viendo%20el%20${auto.marca}%20${auto.modelo}%20en%20su%20página%20y%20quiero%20más%20información." 
+                                   target="_blank" 
+                                   class="w-full block text-center bg-[#25D366] text-white p-5 rounded-2xl font-bold hover:bg-[#1ebe57] transition-colors shadow-lg shadow-green-200 flex justify-center items-center gap-3">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="h-6 brightness-0 invert">
+                                    Contactar al Vendedor
+                                </a>
+
+                                <div class="mt-6 text-center">
+                                    <p class="text-xs text-gray-400">Publicado en Alejoch Cars</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                document.getElementById('contenedor-detalle').innerHTML = '<h2 class="text-2xl text-center text-red-500">Error al cargar el vehículo. Es posible que ya no esté disponible.</h2>';
+            }
+        }
+
+        cargarDetalle();
+    </script>
+</body>
+</html>
