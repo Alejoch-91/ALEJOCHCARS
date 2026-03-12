@@ -3,32 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles del Vehículo | Alejoch Cars</title>
+    <title>Detalles del Vehículo | EliteMotors</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body class="bg-gray-100 font-[Poppins]">
+<body class="bg-slate-50 font-[Poppins]">
 
-    <nav class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50">
-        <h1 class="font-extrabold text-xl text-gray-900">Alejoch <span class="text-[#ff3e00]">Cars</span></h1>
-        <a href="/" class="bg-gray-100 text-sm font-bold px-4 py-2 rounded-xl text-gray-700">← Volver al inicio</a>
+    <nav class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
+        <h1 class="font-extrabold text-xl text-slate-900">Elite<span class="text-[#06b6d4]">Motors</span></h1>
+        <a href="/" class="bg-slate-100 text-xs md:text-sm font-bold px-3 py-2 md:px-4 rounded-xl text-slate-700 transition hover:bg-slate-200">← Volver</a>
     </nav>
 
-    <main class="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-8" id="contenedor-detalles">
-        <div class="md:col-span-3 text-center py-20 animate-pulse">Cargando información...</div>
+    <main class="max-w-6xl mx-auto p-4 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8" id="contenedor-detalles">
+        <div class="md:col-span-3 text-center py-20 animate-pulse text-slate-500">Cargando información...</div>
     </main>
 
-    <section class="bg-gray-900 text-white py-16 mt-12">
-        <div class="max-w-4xl mx-auto text-center px-6">
-            <h2 class="text-3xl font-extrabold mb-4">¿Tienes un carro para vender?</h2>
-            <p class="text-gray-400 mb-8 text-lg">Únete a la comunidad de Alejoch Cars. Miles de compradores están buscando un vehículo como el tuyo. Publicar es rápido, seguro y transparente.</p>
-            <div class="flex justify-center gap-6 mb-8 text-sm font-bold text-gray-300">
+    <section class="bg-slate-900 text-white py-12 md:py-16 mt-8 md:mt-12">
+        <div class="max-w-4xl mx-auto text-center px-4 md:px-6">
+            <h2 class="text-2xl md:text-3xl font-extrabold mb-3 md:mb-4">¿Tienes un carro para vender?</h2>
+            <p class="text-slate-400 mb-6 md:mb-8 text-sm md:text-lg">Únete a la comunidad de EliteMotors. Miles de compradores están buscando un vehículo como el tuyo. Publicar es rápido, seguro y transparente.</p>
+            <div class="flex flex-col md:flex-row justify-center gap-3 md:gap-6 mb-8 text-xs md:text-sm font-bold text-slate-300">
                 <span>✅ Sin comisiones ocultas</span>
                 <span>✅ Contacto directo</span>
                 <span>✅ Mayor visibilidad</span>
             </div>
-            <a href="/publicar.html" class="bg-[#ff3e00] text-white font-extrabold px-8 py-4 rounded-full text-lg hover:bg-orange-600 transition shadow-lg inline-block">Publicar mi vehículo ahora</a>
+            <a href="/publicar.html" class="bg-[#06b6d4] text-white font-extrabold px-6 py-3 md:px-8 md:py-4 rounded-full text-sm md:text-lg hover:bg-cyan-500 transition shadow-lg inline-block">Publicar mi vehículo ahora</a>
         </div>
     </section>
 
@@ -38,7 +38,6 @@
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         async function cargarDetalles() {
-            // Obtener el ID de la URL (ejemplo: detalles.html?id=123)
             const urlParams = new URLSearchParams(window.location.search);
             const vehiculoId = urlParams.get('id');
 
@@ -58,17 +57,16 @@
                 return;
             }
 
-            // Generar tabla de características (Si el JSON está vacío, mostramos un mensaje)
-            let tablaCaracteristicas = '<p class="text-gray-500 text-sm">No se especificaron características.</p>';
+            let tablaCaracteristicas = '<p class="text-slate-500 text-sm">No se especificaron características.</p>';
             if (auto.caracteristicas && Object.keys(auto.caracteristicas).length > 0) {
                 tablaCaracteristicas = `
-                    <div class="overflow-hidden rounded-xl border border-gray-200">
-                        <table class="min-w-full divide-y divide-gray-200 text-sm">
-                            <tbody class="divide-y divide-gray-200 bg-white">
+                    <div class="overflow-hidden rounded-xl border border-slate-200">
+                        <table class="min-w-full divide-y divide-slate-200 text-xs md:text-sm">
+                            <tbody class="divide-y divide-slate-200 bg-white">
                                 ${Object.entries(auto.caracteristicas).map(([key, value], index) => `
-                                    <tr class="${index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}">
-                                        <td class="whitespace-nowrap px-4 py-3 font-bold text-gray-900 w-1/3">${key}</td>
-                                        <td class="whitespace-nowrap px-4 py-3 text-gray-700">${value}</td>
+                                    <tr class="${index % 2 === 0 ? 'bg-slate-50' : 'bg-white'}">
+                                        <td class="whitespace-nowrap px-3 py-2 md:px-4 md:py-3 font-bold text-slate-900 w-1/3">${key}</td>
+                                        <td class="whitespace-nowrap px-3 py-2 md:px-4 md:py-3 text-slate-700">${value}</td>
                                     </tr>
                                 `).join('')}
                             </tbody>
@@ -77,47 +75,45 @@
                 `;
             }
 
-            // Mensaje predeterminado para WhatsApp
-            const mensajeWpp = encodeURIComponent(`Hola ${auto.nombre_vendedor || 'vendedor'}, vi tu ${auto.marca} ${auto.modelo} en Alejoch Cars y estoy interesado.`);
+            const mensajeWpp = encodeURIComponent(`Hola ${auto.nombre_vendedor || 'vendedor'}, vi tu ${auto.marca} ${auto.modelo} en EliteMotors y estoy interesado.`);
             const linkWpp = `https://wa.me/${auto.whatsapp || ''}?text=${mensajeWpp}`;
 
-            // Renderizar la vista
             document.getElementById('contenedor-detalles').innerHTML = `
-                <div class="md:col-span-2 space-y-8">
-                    <img src="${auto.imagen_url || 'https://via.placeholder.com/800x500'}" class="w-full h-[400px] object-cover rounded-[2rem] shadow-sm">
+                <div class="md:col-span-2 space-y-5 md:space-y-8">
+                    <img src="${auto.imagen_url || 'https://via.placeholder.com/800x500'}" class="w-full h-56 md:h-[400px] object-cover rounded-2xl md:rounded-[2rem] shadow-sm">
                     
-                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100">
-                        <h3 class="text-2xl font-extrabold text-gray-900 mb-4">Descripción del vendedor</h3>
-                        <p class="text-gray-600 leading-relaxed whitespace-pre-line">${auto.descripcion || 'Sin descripción detallada.'}</p>
+                    <div class="bg-white p-5 md:p-8 rounded-2xl md:rounded-[2rem] shadow-sm border border-slate-100">
+                        <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 mb-3 md:mb-4">Descripción del vendedor</h3>
+                        <p class="text-slate-600 text-sm md:text-base leading-relaxed whitespace-pre-line">${auto.descripcion || 'Sin descripción detallada.'}</p>
                     </div>
 
-                    <div class="bg-white p-8 rounded-[2rem] shadow-sm border border-gray-100">
-                        <h3 class="text-2xl font-extrabold text-gray-900 mb-6">Ficha Técnica</h3>
+                    <div class="bg-white p-5 md:p-8 rounded-2xl md:rounded-[2rem] shadow-sm border border-slate-100">
+                        <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 mb-4 md:mb-6">Ficha Técnica</h3>
                         ${tablaCaracteristicas}
                     </div>
                 </div>
 
                 <div class="md:col-span-1">
-                    <div class="bg-white p-6 rounded-[2rem] shadow-lg border border-gray-100 sticky top-24">
-                        <h2 class="text-3xl font-black text-gray-900 mb-1">${auto.marca} ${auto.modelo}</h2>
-                        <p class="text-gray-500 mb-4 text-sm">Publicado recientemente</p>
-                        <p class="text-4xl font-extrabold text-[#ff3e00] mb-8">$${Number(auto.precio).toLocaleString('es-CO')} <span class="text-lg text-gray-500">COP</span></p>
+                    <div class="bg-white p-5 md:p-6 rounded-2xl md:rounded-[2rem] shadow-lg border border-slate-100 md:sticky md:top-24 mt-2 md:mt-0">
+                        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-1">${auto.marca} ${auto.modelo}</h2>
+                        <p class="text-slate-500 mb-3 md:mb-4 text-xs md:text-sm">Publicado recientemente</p>
+                        <p class="text-3xl md:text-4xl font-extrabold text-[#06b6d4] mb-6 md:mb-8">$${Number(auto.precio).toLocaleString('es-CO')} <span class="text-sm md:text-lg text-slate-500">COP</span></p>
 
-                        <div class="border-t border-gray-100 pt-6 mb-6">
-                            <h4 class="font-bold text-gray-900 mb-2">Información del Vendedor</h4>
+                        <div class="border-t border-slate-100 pt-5 md:pt-6 mb-5 md:mb-6">
+                            <h4 class="font-bold text-slate-900 mb-2 text-sm md:text-base">Información del Vendedor</h4>
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center text-xl font-bold text-gray-500">
+                                <div class="w-10 h-10 md:w-12 md:h-12 bg-slate-100 rounded-full flex items-center justify-center text-lg md:text-xl font-bold text-slate-500">
                                     ${(auto.nombre_vendedor || 'V')[0].toUpperCase()}
                                 </div>
                                 <div>
-                                    <p class="font-bold text-gray-900">${auto.nombre_vendedor || 'Usuario Anónimo'}</p>
-                                    <p class="text-sm text-gray-500">Vendedor Verificado</p>
+                                    <p class="font-bold text-slate-900 text-sm md:text-base">${auto.nombre_vendedor || 'Usuario Anónimo'}</p>
+                                    <p class="text-xs md:text-sm text-slate-500">Vendedor Verificado</p>
                                 </div>
                             </div>
                         </div>
 
-                        <a href="${linkWpp}" target="_blank" class="w-full bg-[#25D366] hover:bg-[#1ebd57] text-white font-extrabold py-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                        <a href="${linkWpp}" target="_blank" class="w-full bg-[#25D366] hover:bg-[#1ebd57] text-white font-extrabold py-3 md:py-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md text-sm md:text-base">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.898-4.45 9.898-9.896 0-2.64-1.027-5.119-2.894-6.987-1.865-1.868-4.344-2.895-6.985-2.895-5.452 0-9.898 4.451-9.898 9.898 0 2.112.597 3.712 1.592 5.392l-1.066 3.896 3.961-1.096zm10.598-6.12c-.58-.291-3.432-1.695-3.961-1.889-.529-.194-.915-.291-1.302.291-.386.582-1.5 1.889-1.838 2.278-.339.389-.678.438-1.258.147-.58-.291-2.451-.904-4.668-2.898-1.725-1.552-2.888-3.468-3.227-4.051-.339-.583-.036-.898.254-1.189.261-.26.58-.679.87-1.018.291-.34.389-.582.582-.971.194-.389.097-.729-.049-1.02-.146-.291-1.302-3.141-1.784-4.301-.468-1.127-.941-.974-1.302-.992-.338-.016-.725-.018-1.112-.018-.387 0-1.015.146-1.546.729-.53.583-2.028 1.981-2.028 4.832 0 2.851 2.078 5.608 2.368 5.996.291.389 4.085 6.236 9.898 8.747 1.385.597 2.465.953 3.308 1.221 1.393.443 2.662.38 3.665.23 1.134-.171 3.432-1.403 3.914-2.76.482-1.357.482-2.521.339-2.76-.143-.24-.529-.389-1.11-.68z"/>
                             </svg>
                             Contactar por WhatsApp

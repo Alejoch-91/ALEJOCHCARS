@@ -3,164 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Publicar Vehículo | Alejoch Cars</title>
+    <title>Vender Vehículo | Elite Motors</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cobalt: '#0047FF',
+                        space: '#0F172A',
+                        silver: '#94A3B8'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
 </head>
-<body class="bg-gray-50 font-[Poppins]">
+<body class="bg-[#F8FAFC] text-space font-sans">
 
-    <nav class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
-        <h1 class="font-extrabold text-xl text-gray-900">Alejoch <span class="text-[#ff3e00]">Cars</span></h1>
-        <a href="/" class="bg-gray-100 text-sm font-bold px-4 py-2 rounded-xl text-gray-700 hover:bg-gray-200 transition">Cancelar</a>
+    <nav class="bg-white/80 backdrop-blur-md border-b border-slate-100 p-4 sticky top-0 z-50">
+        <div class="max-w-3xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-cobalt rounded-lg flex items-center justify-center">
+                    <span class="text-white font-black text-sm italic">E</span>
+                </div>
+                <h1 class="font-extrabold text-lg tracking-tighter text-space uppercase">Elite Motors</h1>
+            </div>
+            <a href="/" class="text-sm font-bold text-slate-400 hover:text-space transition">Cancelar</a>
+        </div>
     </nav>
 
-    <main class="max-w-2xl mx-auto p-6">
-        <header class="mb-8">
-            <h2 class="text-3xl font-extrabold text-gray-950">Vende tu vehículo</h2>
-            <p class="text-gray-500">Completa la ficha técnica para atraer más compradores.</p>
+    <main class="max-w-3xl mx-auto p-6 md:p-12">
+        <header class="mb-10">
+            <span class="text-cobalt font-bold tracking-widest uppercase text-[10px]">Formulario de Admisión</span>
+            <h2 class="text-4xl font-extrabold text-space tracking-tight mt-1">Registra tu <span class="text-cobalt">Unidad</span></h2>
+            <p class="text-slate-400 mt-2">Ingresa los datos técnicos para publicar en nuestra red exclusiva.</p>
         </header>
 
-        <form id="form-publicar" class="space-y-6 bg-white p-8 rounded-[2.5rem] shadow-sm border border-gray-100">
+        <form id="form-publicar" class="space-y-8 bg-white p-8 md:p-10 rounded-[3rem] shadow-2xl shadow-slate-200/50 border border-slate-50">
             
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Marca</label>
-                    <input type="text" id="marca" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Ej: Mazda">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Modelo</label>
-                    <input type="text" id="modelo" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Ej: CX-5">
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Precio (COP)</label>
-                    <input type="number" id="precio" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Ej: 85000000">
-                </div>
-                <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">URL de la Imagen</label>
-                    <input type="url" id="imagen_url" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="https://link-de-tu-foto.jpg">
-                </div>
-            </div>
-
-            <div>
-                <label class="block text-sm font-bold text-gray-700 mb-2">Descripción del Vehículo</label>
-                <textarea id="descripcion" rows="4" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Cuéntanos sobre el estado, kilometraje, mantenimientos..."></textarea>
-            </div>
-
-            <div class="p-6 bg-gray-50 rounded-[2rem] border border-gray-100">
-                <label class="block text-sm font-bold text-gray-700 mb-3">Ficha Técnica (Opcional)</label>
-                <div id="contenedor-caracteristicas" class="space-y-3 mb-4">
-                    <div class="flex gap-2 fila-caracteristica">
-                        <input type="text" placeholder="Ej: Motor" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm key-input">
-                        <input type="text" placeholder="Ej: 2.0 Turbo" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm value-input">
-                    </div>
-                </div>
-                <button type="button" onclick="agregarFila()" class="text-sm font-bold text-[#ff3e00] hover:text-orange-700 transition flex items-center gap-1">
-                    <span>+</span> Añadir característica
-                </button>
-            </div>
-
-            <div class="border-t pt-6 space-y-4">
-                <h3 class="font-bold text-gray-900">Datos de Contacto</h3>
-                <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-4">
+                <h3 class="text-xs font-black uppercase text-silver tracking-widest border-b border-slate-50 pb-2">1. Información Básica</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">Tu Nombre</label>
-                        <input type="text" id="nombre_vendedor" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Nombre">
+                        <label class="block text-xs font-bold text-slate-500 mb-2 ml-1">Marca</label>
+                        <input type="text" id="marca" required class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-cobalt outline-none transition-all" placeholder="Ej: Porsche">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-gray-500 uppercase mb-1">WhatsApp</label>
-                        <input type="number" id="whatsapp" required class="w-full p-4 bg-gray-50 border-none rounded-2xl focus:ring-2 focus:ring-[#ff3e00]" placeholder="Ej: 57300...">
+                        <label class="block text-xs font-bold text-slate-500 mb-2 ml-1">Modelo</label>
+                        <input type="text" id="modelo" required class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-cobalt outline-none transition-all" placeholder="Ej: 911 Carrera">
                     </div>
                 </div>
             </div>
 
-            <button type="submit" id="btn-publicar" class="w-full bg-[#ff3e00] text-white font-extrabold py-5 rounded-[2rem] text-lg hover:shadow-xl hover:bg-orange-600 transition-all transform active:scale-95">
-                Publicar mi vehículo
+            <div class="space-y-4">
+                <h3 class="text-xs font-black uppercase text-silver tracking-widest border-b border-slate-50 pb-2">2. Especificaciones Técnicas</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2 ml-1">Año</label>
+                        <input type="number" id="ano" required min="1900" max="2027" class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-cobalt outline-none transition-all" placeholder="2024">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2 ml-1">Kilometraje</label>
+                        <input type="number" id="kilometraje" required class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-cobalt outline-none transition-all" placeholder="Ej: 5000">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2 ml-1">Categoría</label>
+                        <select id="tipo_vehiculo" required class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-cobalt outline-none transition-all font-medium">
+                            <option value="Carro">Automóvil / Deportivo</option>
+                            <option value="Camioneta">SUV / Camioneta</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+                <h3 class="text-xs font-black uppercase text-silver tracking-widest border-b border-slate-50 pb-2">3. Comercial & Visual</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2 ml-1">Precio (COP Total)</label>
+                        <input type="number" id="precio" required class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-cobalt outline-none transition-all font-bold text-cobalt" placeholder="Ej: 250000000">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-2 ml-1">URL de Imagen Principal</label>
+                        <input type="url" id="imagen_url" required class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-cobalt outline-none transition-all" placeholder="https://link-de-foto.jpg">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-500 mb-2 ml-1">Descripción de la Unidad</label>
+                    <textarea id="descripcion" rows="3" required class="w-full p-4 bg-slate-50 border-none rounded-2xl focus:ring-2 focus:ring-cobalt outline-none transition-all" placeholder="Estado estético, mantenimientos, extras..."></textarea>
+                </div>
+            </div>
+
+            <div class="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 space-y-4">
+                <h3 class="text-[10px] font-black uppercase text-silver tracking-widest">4. Datos del Propietario</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input type="text" id="nombre_vendedor" required class="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm" placeholder="Nombre completo">
+                    <input type="number" id="whatsapp" required class="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm" placeholder="WhatsApp (Ej: 57300...)">
+                </div>
+            </div>
+
+            <button type="submit" id="btn-publicar" class="w-full bg-cobalt text-white font-extrabold py-5 rounded-[2rem] text-lg shadow-xl shadow-cobalt/20 hover:bg-blue-700 transition-all transform active:scale-95 flex items-center justify-center gap-3">
+                <span>Publicar en Elite Motors</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </button>
         </form>
     </main>
 
     <script>
-        // Configuración de Supabase
+        // Configuración Supabase
         const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphbnhhY2RlaGxsZHhsdGlrb295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NzIxODEsImV4cCI6MjA4ODI0ODE4MX0.HzM2SL1zOTkRKZHvvKe75udJGnmeZcMv9PEoaYlWXO0';
+        const supabaseKey = 'TU_SUPABASE_ANON_KEY';
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-        // Función para agregar filas dinámicas
-        function agregarFila() {
-            const container = document.getElementById('contenedor-caracteristicas');
-            const div = document.createElement('div');
-            div.className = 'flex gap-2 fila-caracteristica animate-fade-in';
-            div.innerHTML = `
-                <input type="text" placeholder="Característica" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm key-input">
-                <input type="text" placeholder="Valor" class="flex-1 p-3 bg-white border border-gray-200 rounded-xl text-sm value-input">
-                <button type="button" onclick="this.parentElement.remove()" class="px-3 text-gray-400 hover:text-red-500">✕</button>
-            `;
-            container.appendChild(div);
-        }
-
-        // Lógica de Envío
         document.getElementById('form-publicar').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-publicar');
+            
+            // Estado de carga
             btn.disabled = true;
-            btn.innerText = "Publicando...";
+            btn.innerHTML = `<span class="animate-spin text-xl">◌</span> Sincronizando...`;
 
-            // 1. Obtener usuario actual
+            // 1. Verificar Usuario
             const { data: { session } } = await _supabase.auth.getSession();
             if (!session) {
-                alert("Debes iniciar sesión para publicar.");
+                alert("Debes iniciar sesión para publicar en Elite Motors.");
                 window.location.href = '/auth.html';
                 return;
             }
 
-            // 2. Construir objeto de características JSON
-            const caracteristicasObj = {};
-            document.querySelectorAll('.fila-caracteristica').forEach(fila => {
-                const key = fila.querySelector('.key-input').value.trim();
-                const value = fila.querySelector('.value-input').value.trim();
-                if (key && value) caracteristicasObj[key] = value;
-            });
-
-            // 3. Preparar datos
+            // 2. Construir Objeto (CONVERSIÓN A NÚMEROS CRÍTICA)
             const nuevoVehiculo = {
                 marca: document.getElementById('marca').value,
                 modelo: document.getElementById('modelo').value,
-                precio: parseFloat(document.getElementById('precio').value),
+                ano: parseInt(document.getElementById('ano').value), // IMPORTANTE: número
+                kilometraje: parseInt(document.getElementById('kilometraje').value), // IMPORTANTE: número
+                tipo_vehiculo: document.getElementById('tipo_vehiculo').value,
+                precio: parseFloat(document.getElementById('precio').value), // IMPORTANTE: número
                 imagen_url: document.getElementById('imagen_url').value,
                 descripcion: document.getElementById('descripcion').value,
                 nombre_vendedor: document.getElementById('nombre_vendedor').value,
                 whatsapp: document.getElementById('whatsapp').value,
-                caracteristicas: caracteristicasObj,
                 user_id: session.user.id,
-                estado: 'pendiente' // Por defecto nacen pendientes de aprobación
+                estado: 'pendiente' // Nace en revisión
             };
 
-            // 4. Insertar en Supabase
+            // 3. Insertar
             const { error } = await _supabase
                 .from('vehiculos')
                 .insert([nuevoVehiculo]);
 
             if (error) {
-                alert("Error al publicar: " + error.message);
+                alert("Error Elite: " + error.message);
                 btn.disabled = false;
-                btn.innerText = "Publicar mi vehículo";
+                btn.innerText = "Publicar en Elite Motors";
             } else {
-                alert("¡Vehículo publicado con éxito! Estará visible cuando sea aprobado.");
+                alert("¡Unidad registrada con éxito! Pasará a revisión técnica antes de ser publicada.");
                 window.location.href = '/mis-publicaciones.html';
             }
         });
     </script>
-
-    <style>
-        @keyframes fade-in {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade-in { animation: fade-in 0.3s ease-out; }
-    </style>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso | Alejoch Cars</title>
+    <title>Acceso | EliteMotors</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -11,48 +11,51 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: { explosive: '#ff3e00', open: '#ffffff' },
+                    colors: { 
+                        accent: '#06b6d4', /* Cian Eléctrico */
+                        dark: '#0f172a',   /* Azul Medianoche */
+                        open: '#ffffff' 
+                    },
                     fontFamily: { sans: ['Poppins', 'sans-serif'] }
                 }
             }
         }
     </script>
 </head>
-<body class="bg-gray-50 flex items-center justify-center min-h-screen p-6 font-sans">
+<body class="bg-slate-50 flex items-center justify-center min-h-screen p-4 md:p-6 font-sans">
 
-    <div id="card-contenedor" class="max-w-md w-full bg-white p-10 rounded-[2.5rem] border-2 border-transparent shadow-2xl text-center transition-all duration-500">
-        <img src="Logo ALEJOCH.png" alt="Alejoch Cars" class="h-12 mx-auto mb-6" onerror="this.src='https://via.placeholder.com/150x50/ff3e00/ffffff?text=ALEJOCH'">
+    <div id="card-contenedor" class="max-w-md w-full bg-white p-8 md:p-10 rounded-[2rem] border-2 border-transparent shadow-2xl text-center transition-all duration-500">
+        <img src="Logo ELITEMOTORS.png" alt="EliteMotors" class="h-12 mx-auto mb-6" onerror="this.src='https://via.placeholder.com/150x50/0f172a/ffffff?text=ELITEMOTORS'">
         
-        <h2 id="titulo-form" class="text-3xl font-extrabold text-gray-950 mb-2">Iniciar Sesión</h2>
-        <p id="subtitulo-form" class="text-sm text-gray-500 mb-8 leading-relaxed">Accede para gestionar tus publicaciones.</p>
+        <h2 id="titulo-form" class="text-2xl md:text-3xl font-extrabold text-dark mb-2">Iniciar Sesión</h2>
+        <p id="subtitulo-form" class="text-xs md:text-sm text-slate-500 mb-8 leading-relaxed">Accede para gestionar tus publicaciones.</p>
 
-        <form id="authForm" class="space-y-5 text-left">
+        <form id="authForm" class="space-y-4 md:space-y-5 text-left">
             <div>
-                <label class="block text-[10px] font-extrabold text-gray-400 uppercase mb-2 tracking-[0.2em]">Correo Electrónico</label>
+                <label class="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-[0.2em]">Correo Electrónico</label>
                 <input type="email" id="email" placeholder="tu@correo.com" required 
-                    class="w-full border border-gray-100 bg-gray-50 p-4 rounded-2xl focus:border-explosive focus:bg-white focus:ring-0 outline-none transition-all">
+                    class="w-full border border-slate-200 bg-slate-50 p-3 md:p-4 rounded-xl md:rounded-2xl focus:border-accent focus:bg-white focus:ring-0 outline-none transition-all">
             </div>
             <div>
-                <label class="block text-[10px] font-extrabold text-gray-400 uppercase mb-2 tracking-[0.2em]">Contraseña</label>
+                <label class="block text-[10px] font-extrabold text-slate-400 uppercase mb-2 tracking-[0.2em]">Contraseña</label>
                 <input type="password" id="password" placeholder="••••••••" required 
-                    class="w-full border border-gray-100 bg-gray-50 p-4 rounded-2xl focus:border-explosive focus:bg-white focus:ring-0 outline-none transition-all">
+                    class="w-full border border-slate-200 bg-slate-50 p-3 md:p-4 rounded-xl md:rounded-2xl focus:border-accent focus:bg-white focus:ring-0 outline-none transition-all">
             </div>
             <button type="submit" id="btn-submit" 
-                class="w-full bg-explosive text-white p-5 rounded-2xl font-extrabold hover:bg-black transition-all transform active:scale-95 shadow-xl shadow-orange-100">
+                class="w-full bg-accent text-white p-4 md:p-5 rounded-xl md:rounded-2xl font-extrabold hover:bg-dark transition-all transform active:scale-95 shadow-lg shadow-cyan-100 mt-2">
                 Entrar
             </button>
         </form>
 
-        <div class="mt-10 pt-6 border-t border-gray-50">
-            <p class="text-sm text-gray-400 font-medium">
+        <div class="mt-8 md:mt-10 pt-6 border-t border-slate-100">
+            <p class="text-xs md:text-sm text-slate-400 font-medium">
                 <span id="texto-alterno">¿Aún no tienes cuenta?</span> 
-                <button type="button" onclick="toggleModo()" id="btn-alterno" class="text-explosive font-extrabold hover:underline ml-1">Regístrate gratis</button>
+                <button type="button" onclick="toggleModo()" id="btn-alterno" class="text-accent font-extrabold hover:underline ml-1">Regístrate gratis</button>
             </p>
         </div>
     </div>
 
     <script>
-        // CONFIGURACIÓN DE SUPABASE
         const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co'; 
         const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphbnhhY2RlaGxsZHhsdGlrb295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NzIxODEsImV4cCI6MjA4ODI0ODE4MX0.HzM2SL1zOTkRKZHvvKe75udJGnmeZcMv9PEoaYlWXO0';
         const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
@@ -63,18 +66,16 @@
             esRegistro = !esRegistro;
             const card = document.getElementById('card-contenedor');
             
-            // Cambios de texto
             document.getElementById('titulo-form').innerText = esRegistro ? "Crear Cuenta" : "Iniciar Sesión";
-            document.getElementById('subtitulo-form').innerText = esRegistro ? "Únete a la red de vendedores de Alejoch." : "Accede para gestionar tus publicaciones.";
+            document.getElementById('subtitulo-form').innerText = esRegistro ? "Únete a la red de vendedores de EliteMotors." : "Accede para gestionar tus publicaciones.";
             document.getElementById('btn-submit').innerText = esRegistro ? "Registrarme Ahora" : "Entrar";
             document.getElementById('texto-alterno').innerText = esRegistro ? "¿Ya eres parte?" : "¿Aún no tienes cuenta?";
             document.getElementById('btn-alterno').innerText = esRegistro ? "Inicia sesión" : "Regístrate gratis";
 
-            // Efecto visual: Resaltar el borde cuando es registro
             if(esRegistro) {
-                card.classList.add('border-explosive/10');
+                card.classList.add('border-accent/30');
             } else {
-                card.classList.remove('border-explosive/10');
+                card.classList.remove('border-accent/30');
             }
         }
 
@@ -89,18 +90,15 @@
 
             try {
                 if (esRegistro) {
-                    // FLUJO DE REGISTRO
                     const { data, error } = await supabaseClient.auth.signUp({ email, password });
                     if (error) throw error;
                     alert("¡Cuenta creada con éxito! Ahora puedes iniciar sesión.");
                     toggleModo(); 
                 } else {
-                    // FLUJO DE LOGIN
                     const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
                     if (error) throw error;
                     
-                    // Guardar token y redirigir
-                    localStorage.setItem('alejoch_token', data.session.access_token);
+                    localStorage.setItem('elitemotors_token', data.session.access_token);
                     window.location.href = '/publicar.html';
                 }
             } catch (err) {

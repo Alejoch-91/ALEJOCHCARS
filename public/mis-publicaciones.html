@@ -3,44 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mis Publicaciones | Alejoch Cars</title>
+    <title>Mis Publicaciones | Elite Motors</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cobalt: '#0047FF',
+                        space: '#0F172A',
+                        silver: '#94A3B8'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .status-badge-aprobado { background: #ecfdf5; color: #059669; }
+        .status-badge-pendiente { background: #fff7ed; color: #ea580c; }
+        .glass-card { background: white; border: 1px solid #f1f5f9; box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03); }
+    </style>
 </head>
-<body class="bg-gray-50 font-[Poppins]">
+<body class="bg-[#F8FAFC] text-space font-sans">
 
-    <nav class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
-        <h1 class="font-extrabold text-xl text-gray-900">Alejoch <span class="text-[#ff3e00]">Cars</span></h1>
-        <a href="/publicar.html" class="bg-gray-100 text-sm font-bold px-4 py-2 rounded-xl text-gray-700 hover:bg-gray-200 transition">← Volver</a>
+    <nav class="bg-white border-b border-slate-100 p-4 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-5xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-cobalt rounded-lg flex items-center justify-center">
+                    <span class="text-white font-black text-sm italic">E</span>
+                </div>
+                <h1 class="font-extrabold text-lg tracking-tighter">ELITE <span class="text-cobalt">MOTORS</span></h1>
+            </div>
+            <a href="/" class="text-sm font-bold text-slate-500 hover:text-cobalt transition flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                Volver a Galería
+            </a>
+        </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto p-6">
-        <header class="mb-8">
-            <h2 class="text-3xl font-extrabold text-gray-950">Mis Publicaciones</h2>
-            <p class="text-gray-500">Aquí puedes ver el estado de tus vehículos.</p>
+    <main class="max-w-4xl mx-auto p-6 md:p-12">
+        <header class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+                <span class="text-cobalt font-bold tracking-widest uppercase text-[10px]">Panel de Control</span>
+                <h2 class="text-4xl font-extrabold text-space tracking-tight mt-1">Gestión de <span class="text-cobalt">Inventario</span></h2>
+                <p class="text-slate-400 mt-2 font-medium">Administra tus vehículos publicados en la plataforma Elite.</p>
+            </div>
+            <a href="/publicar.html" class="bg-cobalt text-white px-6 py-3 rounded-2xl font-bold text-sm shadow-lg shadow-cobalt/20 hover:scale-105 transition-transform text-center">
+                + Nueva Publicación
+            </a>
         </header>
 
-        <div id="lista-publicaciones" class="space-y-4">
-            <div class="animate-pulse flex space-x-4 bg-white p-6 rounded-3xl border border-gray-100">
-                <div class="rounded-xl bg-gray-200 h-24 w-24"></div>
-                <div class="flex-1 space-y-4 py-1">
-                    <div class="h-4 bg-gray-200 rounded w-3/4"></div>
-                    <div class="h-4 bg-gray-200 rounded w-1/2"></div>
-                </div>
+        <div id="lista-publicaciones" class="space-y-6">
+            <div class="animate-pulse space-y-4">
+                <div class="h-32 bg-slate-200 rounded-[2rem] w-full"></div>
+                <div class="h-32 bg-slate-200 rounded-[2rem] w-full"></div>
             </div>
         </div>
     </main>
 
     <script>
+        // Configuración de Supabase (Asegúrate de usar tus credenciales)
         const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphbnhhY2RlaGxsZHhsdGlrb295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NzIxODEsImV4cCI6MjA4ODI0ODE4MX0.HzM2SL1zOTkRKZHvvKe75udJGnmeZcMv9PEoaYlWXO0';
+        const supabaseKey = 'TU_SUPABASE_ANON_KEY'; 
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         async function cargarMisAutos() {
             const container = document.getElementById('lista-publicaciones');
             
-            // 1. Obtener el usuario actual directamente de la sesión
+            // 1. Verificar Sesión
             const { data: { session } } = await _supabase.auth.getSession();
 
             if (!session) {
@@ -50,7 +83,7 @@
 
             const user = session.user;
 
-            // 2. Consultar la tabla 'vehiculos'
+            // 2. Consultar Vehículos del Usuario
             const { data: vehiculos, error } = await _supabase
                 .from('vehiculos') 
                 .select('*')
@@ -58,46 +91,63 @@
                 .order('creado_en', { ascending: false });
 
             if (error) {
-                console.error(error);
-                container.innerHTML = `<p class="text-red-500 text-center py-10 font-bold">Error al conectar con la base de datos: ${error.message}</p>`;
+                container.innerHTML = `<div class="p-8 bg-red-50 text-red-600 rounded-3xl border border-red-100 text-center font-bold">Error de sincronización: ${error.message}</div>`;
                 return;
             }
 
             if (!vehiculos || vehiculos.length === 0) {
                 container.innerHTML = `
-                    <div class="text-center py-20 bg-white rounded-[2.5rem] border-2 border-dashed border-gray-200">
-                        <p class="text-gray-400 mb-4 font-medium">Aún no tienes publicaciones activas.</p>
-                        <a href="/publicar.html" class="text-[#ff3e00] font-bold hover:underline">Publicar mi primer carro</a>
+                    <div class="text-center py-24 bg-white rounded-[3rem] border-2 border-dashed border-slate-200">
+                        <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-10 h-10 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </div>
+                        <p class="text-slate-500 font-bold text-lg">No tienes unidades activas</p>
+                        <p class="text-slate-400 text-sm mb-8">Empieza a vender tus vehículos con el estándar Elite Motors.</p>
+                        <a href="/publicar.html" class="text-cobalt font-extrabold hover:underline">Publicar mi primer vehículo →</a>
                     </div>`;
                 return;
             }
 
-            // 3. Renderizar tarjetas con botón de eliminar
+            // 3. Renderizar Publicaciones
             container.innerHTML = vehiculos.map(auto => `
-                <div id="card-${auto.id}" class="bg-white p-5 rounded-[2rem] border border-gray-100 shadow-sm flex items-center gap-5 hover:shadow-md transition-all">
-                    <img src="${auto.imagen_url || 'https://via.placeholder.com/150'}" class="w-24 h-24 object-cover rounded-2xl bg-gray-100">
-                    <div class="flex-1">
-                        <h3 class="font-extrabold text-gray-900 text-lg leading-tight">${auto.marca} ${auto.modelo}</h3>
-                        <p class="text-[#ff3e00] font-bold text-sm">$${Number(auto.precio).toLocaleString('es-CO')} COP</p>
-                        <div class="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-widest ${auto.estado === 'aprobado' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}">
-                            <span class="w-1.5 h-1.5 rounded-full bg-current"></span>
-                            ${auto.estado === 'aprobado' ? 'Publicado' : 'Pendiente'}
+                <div id="card-${auto.id}" class="glass-card p-6 rounded-[2.5rem] flex flex-col md:flex-row items-center gap-8 hover:border-cobalt/30 transition-all duration-300 relative group">
+                    <div class="relative w-full md:w-40 h-32 flex-shrink-0">
+                        <img src="${auto.imagen_url || 'https://via.placeholder.com/400'}" class="w-full h-full object-cover rounded-[1.5rem] bg-slate-100 shadow-sm">
+                        <div class="absolute -top-2 -left-2 px-3 py-1 rounded-lg text-[9px] font-black uppercase tracking-tighter shadow-sm status-badge-${auto.estado || 'pendiente'}">
+                            ${auto.estado === 'aprobado' ? 'Publicado' : 'Revisión'}
                         </div>
                     </div>
-                    <div class="flex flex-col gap-2">
-                         <button onclick="eliminarVehiculo('${auto.id}')" class="p-3 bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-colors group cursor-pointer" title="Eliminar publicación">
+
+                    <div class="flex-1 text-center md:text-left">
+                        <p class="text-[10px] font-black text-cobalt uppercase tracking-widest">${auto.marca}</p>
+                        <h3 class="font-extrabold text-space text-2xl tracking-tight">${auto.modelo}</h3>
+                        <div class="flex flex-wrap justify-center md:justify-start gap-4 mt-2">
+                            <span class="text-slate-400 text-xs font-semibold flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-width="2"/></svg>
+                                ${auto.ano || '---'}
+                            </span>
+                            <span class="text-slate-400 text-xs font-semibold flex items-center gap-1">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-width="2"/></svg>
+                                ${Number(auto.kilometraje).toLocaleString()} KM
+                            </span>
+                        </div>
+                        <p class="text-space font-black text-lg mt-3">$${Number(auto.precio).toLocaleString('es-CO')} <span class="text-[10px] text-slate-400">COP</span></p>
+                    </div>
+
+                    <div class="flex md:flex-col gap-2 w-full md:w-auto">
+                        <button onclick="eliminarVehiculo('${auto.id}')" class="flex-1 md:flex-none p-4 bg-red-50 text-red-500 rounded-2xl hover:bg-red-500 hover:text-white transition-all duration-300 flex items-center justify-center gap-2 font-bold text-sm" title="Retirar unidad">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
+                            <span class="md:hidden">Eliminar</span>
                         </button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Función para eliminar un vehículo
         async function eliminarVehiculo(id) {
-            if (!confirm('¿Estás seguro de que quieres eliminar esta publicación? Esta acción no se puede deshacer.')) return;
+            if (!confirm('¿Deseas retirar esta unidad de Elite Motors? Esta acción es irreversible.')) return;
 
             const { error } = await _supabase
                 .from('vehiculos')
@@ -105,16 +155,16 @@
                 .eq('id', id);
 
             if (error) {
-                alert("Error al eliminar: " + error.message);
+                alert("Error al retirar: " + error.message);
             } else {
                 const card = document.getElementById(`card-${id}`);
                 card.style.opacity = '0';
-                card.style.transform = 'scale(0.9)';
+                card.style.transform = 'translateX(20px)';
                 setTimeout(() => card.remove(), 300);
             }
         }
 
-        // Iniciar la carga
+        // Ejecutar al cargar
         cargarMisAutos();
     </script>
 </body>
