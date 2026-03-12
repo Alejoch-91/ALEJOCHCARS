@@ -3,38 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalles del Vehículo | EliteMotors</title>
+    <title>Detalles del Vehículo | Elite Motors</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cobalt: '#0047FF',
+                        space: '#0F172A',
+                        silver: '#94A3B8'
+                    },
+                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-nav { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
+        .badge-premium { background: linear-gradient(135deg, #0047FF, #00d1ff); }
+    </style>
 </head>
-<body class="bg-slate-50 font-[Poppins]">
+<body class="bg-[#F8FAFC] text-space font-sans">
 
-    <nav class="bg-white border-b p-4 flex justify-between items-center sticky top-0 z-50 shadow-sm">
-        <h1 class="font-extrabold text-xl text-slate-900">Elite<span class="text-[#06b6d4]">Motors</span></h1>
-        <a href="/" class="bg-slate-100 text-xs md:text-sm font-bold px-3 py-2 md:px-4 rounded-xl text-slate-700 transition hover:bg-slate-200">← Volver</a>
+    <nav class="glass-nav border-b border-slate-100 p-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto w-full flex justify-between items-center">
+            <h1 class="font-extrabold text-xl tracking-tighter">ELITE <span class="text-cobalt">MOTORS</span></h1>
+            <a href="/" class="text-xs font-bold px-4 py-2 rounded-xl text-slate-500 hover:bg-slate-100 transition">← Volver al Inventario</a>
+        </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto p-4 md:p-6 grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8" id="contenedor-detalles">
-        <div class="md:col-span-3 text-center py-20 animate-pulse text-slate-500">Cargando información...</div>
+    <main class="max-w-6xl mx-auto p-4 md:p-8 grid grid-cols-1 md:grid-cols-3 gap-8" id="contenedor-detalles">
+        <div class="col-span-3 flex flex-col items-center py-20">
+            <div class="w-10 h-10 border-4 border-slate-200 border-t-cobalt rounded-full animate-spin"></div>
+            <p class="mt-4 font-bold text-slate-400">Verificando historial del vehículo...</p>
+        </div>
     </main>
 
-    <section class="bg-slate-900 text-white py-12 md:py-16 mt-8 md:mt-12">
-        <div class="max-w-4xl mx-auto text-center px-4 md:px-6">
-            <h2 class="text-2xl md:text-3xl font-extrabold mb-3 md:mb-4">¿Tienes un carro para vender?</h2>
-            <p class="text-slate-400 mb-6 md:mb-8 text-sm md:text-lg">Únete a la comunidad de EliteMotors. Miles de compradores están buscando un vehículo como el tuyo. Publicar es rápido, seguro y transparente.</p>
-            <div class="flex flex-col md:flex-row justify-center gap-3 md:gap-6 mb-8 text-xs md:text-sm font-bold text-slate-300">
-                <span>✅ Sin comisiones ocultas</span>
-                <span>✅ Contacto directo</span>
-                <span>✅ Mayor visibilidad</span>
-            </div>
-            <a href="/publicar.html" class="bg-[#06b6d4] text-white font-extrabold px-6 py-3 md:px-8 md:py-4 rounded-full text-sm md:text-lg hover:bg-cyan-500 transition shadow-lg inline-block">Publicar mi vehículo ahora</a>
+    <section class="bg-space text-white py-16 mt-12">
+        <div class="max-w-4xl mx-auto text-center px-6">
+            <h2 class="text-3xl font-extrabold mb-4">¿Vendes una unidad similar?</h2>
+            <p class="text-slate-400 mb-8">Únete a Elite Motors y expón tu vehículo ante compradores calificados.</p>
+            <a href="/publicar.html" class="bg-cobalt text-white font-bold px-10 py-4 rounded-2xl hover:bg-blue-700 transition shadow-xl shadow-cobalt/20 inline-block">Publicar ahora</a>
         </div>
     </section>
 
     <script>
         const supabaseUrl = 'https://janxacdehlldxltikooy.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImphbnhhY2RlaGxsZHhsdGlrb295Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI2NzIxODEsImV4cCI6MjA4ODI0ODE4MX0.HzM2SL1zOTkRKZHvvKe75udJGnmeZcMv9PEoaYlWXO0';
+        const supabaseKey = 'TU_SUPABASE_ANON_KEY'; // Usa tu key aquí
         const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
         async function cargarDetalles() {
@@ -42,7 +60,7 @@
             const vehiculoId = urlParams.get('id');
 
             if (!vehiculoId) {
-                document.getElementById('contenedor-detalles').innerHTML = '<p class="text-red-500 col-span-3 text-center">Vehículo no encontrado.</p>';
+                document.getElementById('contenedor-detalles').innerHTML = '<p class="text-red-500 col-span-3 text-center">ID de vehículo no válido.</p>';
                 return;
             }
 
@@ -53,70 +71,78 @@
                 .single();
 
             if (error || !auto) {
-                document.getElementById('contenedor-detalles').innerHTML = '<p class="text-red-500 col-span-3 text-center">Error al cargar el vehículo.</p>';
+                document.getElementById('contenedor-detalles').innerHTML = '<p class="text-red-500 col-span-3 text-center">No pudimos encontrar esta unidad en el inventario.</p>';
                 return;
             }
 
-            let tablaCaracteristicas = '<p class="text-slate-500 text-sm">No se especificaron características.</p>';
-            if (auto.caracteristicas && Object.keys(auto.caracteristicas).length > 0) {
-                tablaCaracteristicas = `
-                    <div class="overflow-hidden rounded-xl border border-slate-200">
-                        <table class="min-w-full divide-y divide-slate-200 text-xs md:text-sm">
-                            <tbody class="divide-y divide-slate-200 bg-white">
-                                ${Object.entries(auto.caracteristicas).map(([key, value], index) => `
-                                    <tr class="${index % 2 === 0 ? 'bg-slate-50' : 'bg-white'}">
-                                        <td class="whitespace-nowrap px-3 py-2 md:px-4 md:py-3 font-bold text-slate-900 w-1/3">${key}</td>
-                                        <td class="whitespace-nowrap px-3 py-2 md:px-4 md:py-3 text-slate-700">${value}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-            }
-
-            const mensajeWpp = encodeURIComponent(`Hola ${auto.nombre_vendedor || 'vendedor'}, vi tu ${auto.marca} ${auto.modelo} en EliteMotors y estoy interesado.`);
-            const linkWpp = `https://wa.me/${auto.whatsapp || ''}?text=${mensajeWpp}`;
+            // Mensaje de WhatsApp personalizado
+            const mensajeWpp = encodeURIComponent(`Hola, estoy interesado en el ${auto.marca} ${auto.modelo} (${auto.ano}) que vi en Elite Motors por $${Number(auto.precio).toLocaleString('es-CO')}. ¿Sigue disponible?`);
+            const linkWpp = `https://wa.me/${auto.whatsapp}?text=${mensajeWpp}`;
 
             document.getElementById('contenedor-detalles').innerHTML = `
-                <div class="md:col-span-2 space-y-5 md:space-y-8">
-                    <img src="${auto.imagen_url || 'https://via.placeholder.com/800x500'}" class="w-full h-56 md:h-[400px] object-cover rounded-2xl md:rounded-[2rem] shadow-sm">
+                <div class="md:col-span-2 space-y-6">
+                    <div class="relative group overflow-hidden rounded-[2.5rem] shadow-2xl">
+                        <img src="${auto.imagen_url}" class="w-full h-[300px] md:h-[500px] object-cover transition-transform duration-700 group-hover:scale-105">
+                        <div class="absolute top-6 left-6">
+                            <span class="badge-premium text-white text-[10px] font-black px-4 py-2 rounded-full uppercase tracking-widest shadow-lg">Unidad Elite</span>
+                        </div>
+                    </div>
                     
-                    <div class="bg-white p-5 md:p-8 rounded-2xl md:rounded-[2rem] shadow-sm border border-slate-100">
-                        <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 mb-3 md:mb-4">Descripción del vendedor</h3>
-                        <p class="text-slate-600 text-sm md:text-base leading-relaxed whitespace-pre-line">${auto.descripcion || 'Sin descripción detallada.'}</p>
+                    <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                        <h3 class="text-xl font-extrabold text-space mb-4">Reseña del Propietario</h3>
+                        <p class="text-slate-500 leading-relaxed whitespace-pre-line">${auto.descripcion || 'Sin descripción adicional disponible.'}</p>
                     </div>
 
-                    <div class="bg-white p-5 md:p-8 rounded-2xl md:rounded-[2rem] shadow-sm border border-slate-100">
-                        <h3 class="text-xl md:text-2xl font-extrabold text-slate-900 mb-4 md:mb-6">Ficha Técnica</h3>
-                        ${tablaCaracteristicas}
+                    <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-sm">
+                        <h3 class="text-xl font-extrabold text-space mb-6">Especificaciones Técnicas</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-4 bg-slate-50 rounded-2xl">
+                                <p class="text-[10px] font-black text-silver uppercase tracking-widest">Año</p>
+                                <p class="font-bold text-space">${auto.ano}</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-2xl">
+                                <p class="text-[10px] font-black text-silver uppercase tracking-widest">Kilometraje</p>
+                                <p class="font-bold text-space">${Number(auto.kilometraje).toLocaleString()} KM</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-2xl">
+                                <p class="text-[10px] font-black text-silver uppercase tracking-widest">Categoría</p>
+                                <p class="font-bold text-space">${auto.tipo_vehiculo}</p>
+                            </div>
+                            <div class="p-4 bg-slate-50 rounded-2xl">
+                                <p class="text-[10px] font-black text-silver uppercase tracking-widest">Estado</p>
+                                <p class="font-bold text-green-600">Certificado</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="md:col-span-1">
-                    <div class="bg-white p-5 md:p-6 rounded-2xl md:rounded-[2rem] shadow-lg border border-slate-100 md:sticky md:top-24 mt-2 md:mt-0">
-                        <h2 class="text-2xl md:text-3xl font-black text-slate-900 mb-1">${auto.marca} ${auto.modelo}</h2>
-                        <p class="text-slate-500 mb-3 md:mb-4 text-xs md:text-sm">Publicado recientemente</p>
-                        <p class="text-3xl md:text-4xl font-extrabold text-[#06b6d4] mb-6 md:mb-8">$${Number(auto.precio).toLocaleString('es-CO')} <span class="text-sm md:text-lg text-slate-500">COP</span></p>
+                    <div class="bg-white p-8 rounded-[2.5rem] shadow-2xl shadow-slate-200 border border-slate-50 md:sticky md:top-24">
+                        <p class="text-cobalt font-black text-[10px] uppercase tracking-[0.2em] mb-2">${auto.marca}</p>
+                        <h2 class="text-4xl font-extrabold text-space tracking-tight mb-4">${auto.modelo}</h2>
+                        
+                        <div class="mb-8">
+                            <p class="text-slate-400 text-xs font-bold uppercase tracking-widest mb-1">Inversión</p>
+                            <p class="text-4xl font-black text-space">$${Number(auto.precio).toLocaleString('es-CO')}<span class="text-sm text-slate-400 ml-2">COP</span></p>
+                        </div>
 
-                        <div class="border-t border-slate-100 pt-5 md:pt-6 mb-5 md:mb-6">
-                            <h4 class="font-bold text-slate-900 mb-2 text-sm md:text-base">Información del Vendedor</h4>
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 md:w-12 md:h-12 bg-slate-100 rounded-full flex items-center justify-center text-lg md:text-xl font-bold text-slate-500">
+                        <div class="pt-6 border-t border-slate-50 mb-8">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center font-bold text-cobalt">
                                     ${(auto.nombre_vendedor || 'V')[0].toUpperCase()}
                                 </div>
                                 <div>
-                                    <p class="font-bold text-slate-900 text-sm md:text-base">${auto.nombre_vendedor || 'Usuario Anónimo'}</p>
-                                    <p class="text-xs md:text-sm text-slate-500">Vendedor Verificado</p>
+                                    <p class="font-extrabold text-space">${auto.nombre_vendedor || 'Vendedor'}</p>
+                                    <p class="text-xs text-slate-400 font-medium">Asesor Comercial</p>
                                 </div>
                             </div>
                         </div>
 
-                        <a href="${linkWpp}" target="_blank" class="w-full bg-[#25D366] hover:bg-[#1ebd57] text-white font-extrabold py-3 md:py-4 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-md text-sm md:text-base">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6" fill="currentColor" viewBox="0 0 24 24">
+                        <a href="${linkWpp}" target="_blank" class="w-full bg-[#25D366] hover:scale-[1.02] text-white font-extrabold py-5 rounded-2xl flex items-center justify-center gap-3 transition-all shadow-xl shadow-green-200 text-sm">
+                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.898-4.45 9.898-9.896 0-2.64-1.027-5.119-2.894-6.987-1.865-1.868-4.344-2.895-6.985-2.895-5.452 0-9.898 4.451-9.898 9.898 0 2.112.597 3.712 1.592 5.392l-1.066 3.896 3.961-1.096zm10.598-6.12c-.58-.291-3.432-1.695-3.961-1.889-.529-.194-.915-.291-1.302.291-.386.582-1.5 1.889-1.838 2.278-.339.389-.678.438-1.258.147-.58-.291-2.451-.904-4.668-2.898-1.725-1.552-2.888-3.468-3.227-4.051-.339-.583-.036-.898.254-1.189.261-.26.58-.679.87-1.018.291-.34.389-.582.582-.971.194-.389.097-.729-.049-1.02-.146-.291-1.302-3.141-1.784-4.301-.468-1.127-.941-.974-1.302-.992-.338-.016-.725-.018-1.112-.018-.387 0-1.015.146-1.546.729-.53.583-2.028 1.981-2.028 4.832 0 2.851 2.078 5.608 2.368 5.996.291.389 4.085 6.236 9.898 8.747 1.385.597 2.465.953 3.308 1.221 1.393.443 2.662.38 3.665.23 1.134-.171 3.432-1.403 3.914-2.76.482-1.357.482-2.521.339-2.76-.143-.24-.529-.389-1.11-.68z"/>
                             </svg>
-                            Contactar por WhatsApp
+                            Contactar Asesor
                         </a>
                     </div>
                 </div>
